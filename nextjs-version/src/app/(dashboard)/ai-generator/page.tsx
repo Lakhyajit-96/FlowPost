@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Progress } from "@/components/ui/progress"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Sparkles, Copy, Check, Loader2, Wand2, Save, History, Trash2, Calendar, Crown, Zap, Lock, Target, Lightbulb, AlertCircle, BookOpen, Sliders, FileType, Hash, MessageCircle, Smile, Settings2 } from "lucide-react"
+import { Sparkles, Copy, Check, Loader2, Wand2, Save, History, Trash2, Calendar, Crown, Zap, Lock, Target, Lightbulb, AlertCircle, BookOpen, Sliders, FileType, Hash, MessageCircle, Smile, Settings2, RefreshCw, Users, Mic, Palette } from "lucide-react"
 import { toast } from "sonner"
 import { useUser } from "@clerk/nextjs"
 import { createClient } from "@/lib/supabase/client"
@@ -574,28 +574,40 @@ export default function AIGeneratorPage() {
             </p>
           </div>
           {planLimits && (
-            <Card className="min-w-[220px]">
+            <Card className="min-w-[280px]">
               <CardContent className="pt-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium">{PLAN_FEATURES[userPlan as keyof typeof PLAN_FEATURES]?.name} Plan</span>
-                  <Crown className="h-4 w-4 text-primary" />
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <p className="text-xs text-muted-foreground">Current Plan</p>
+                    <p className="text-lg font-bold">{PLAN_FEATURES[userPlan as keyof typeof PLAN_FEATURES]?.name}</p>
+                  </div>
+                  <Crown className="h-5 w-5 text-primary" />
                 </div>
                 {planLimits.ai_generations_limit === -1 ? (
-                  <div className="text-sm text-muted-foreground">Unlimited generations</div>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Zap className="h-4 w-4 text-primary" />
+                      <span>Unlimited AI generations</span>
+                    </div>
+                  </div>
                 ) : (
-                  <>
-                    <div className="text-2xl font-bold">{planLimits.remaining}</div>
-                    <div className="text-xs text-muted-foreground mb-2">
-                      of {planLimits.ai_generations_limit} remaining
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">This Month</span>
+                      <span className="font-semibold">{planLimits.ai_generations_used} / {planLimits.ai_generations_limit}</span>
                     </div>
                     <Progress 
                       value={(planLimits.ai_generations_used / planLimits.ai_generations_limit) * 100} 
                       className="h-2"
                     />
-                  </>
+                    <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <span>{planLimits.remaining} remaining</span>
+                      <span>{Math.round((planLimits.ai_generations_used / planLimits.ai_generations_limit) * 100)}% used</span>
+                    </div>
+                  </div>
                 )}
                 {userPlan !== "agency" && (
-                  <Button variant="link" size="sm" className="p-0 h-auto mt-2" asChild>
+                  <Button variant="outline" size="sm" className="w-full mt-3 cursor-pointer" asChild>
                     <Link href="/settings/billing">
                       <Zap className="h-3 w-3 mr-1" />
                       Upgrade Plan
@@ -660,9 +672,177 @@ export default function AIGeneratorPage() {
         </TabsList>
 
         <TabsContent value="generate" className="space-y-6">
-          <div className="grid gap-6 lg:grid-cols-[400px_1fr_350px]">
-            {/* Left Sidebar - Settings */}
+          <div className="grid gap-6 lg:grid-cols-[1fr_400px]">
+            {/* Main Content Area - Left */}
             <div className="space-y-4">
+              {/* Prompt Card */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Wand2 className="h-5 w-5 text-primary" />
+                    Your Prompt
+                  </CardTitle>
+                  <CardDescription>
+                    Describe what you want to create
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Textarea
+                    placeholder="E.g., Write a post about our new product launch that highlights the key features and benefits..."
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    rows={6}
+                    className="resize-none"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Be specific about what you want to create
+                  </p>
+                  <Button
+                    onClick={handleGenerate}
+                    disabled={generating || !prompt.trim() || !planLimits?.allowed || loadingLimits}
+                    className="w-full cursor-pointer"
+                  >
+                    {generating ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Generating...
+                      </>
+                    ) : (
+                      <>
+                        <Wand2 className="h-4 w-4 mr-2" />
+                        Generate Content
+                      </>
+                    )}
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Output Card */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Sparkles className="h-5 w-5 text-primary" />
+                    Generated Content
+                  </CardTitle>
+                  <CardDescription>
+                    Your AI-generated content will appear here
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {generatedContent ? (
+                    <>
+                      <div className="relative">
+                        <div className="bg-muted p-4 rounded-lg min-h-[300px] max-h-[500px] overflow-y-auto whitespace-pre-wrap">
+                          {generatedContent}
+                        </div>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="absolute top-2 right-2 cursor-pointer"
+                          onClick={handleCopy}
+                        >
+                          {copied ? (
+                            <>
+                              <Check className="h-4 w-4 mr-2 text-green-500" />
+                              Copied!
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="h-4 w-4 mr-2" />
+                              Copy
+                            </>
+                          )}
+                        </Button>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2">
+                        <Button
+                          variant="outline"
+                          className="cursor-pointer"
+                          onClick={handleGenerate}
+                          disabled={generating || !planLimits?.allowed}
+                        >
+                          <RefreshCw className="h-4 w-4 mr-2" />
+                          Regenerate
+                        </Button>
+                        <Button
+                          variant="outline"
+                          className="cursor-pointer"
+                          onClick={handleSave}
+                          disabled={saving || !user}
+                        >
+                          {saving ? (
+                            <>
+                              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                              Saving...
+                            </>
+                          ) : (
+                            <>
+                              <Save className="h-4 w-4 mr-2" />
+                              Save
+                            </>
+                          )}
+                        </Button>
+                        <ExportOptions 
+                          content={generatedContent}
+                          metadata={{
+                            contentType,
+                            platform,
+                            tone,
+                            length
+                          }}
+                        />
+                        <Button
+                          variant="default"
+                          className="cursor-pointer"
+                          onClick={() => toast.info("Post scheduling coming soon!")}
+                        >
+                          <Calendar className="h-4 w-4 mr-2" />
+                          Schedule
+                        </Button>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2">
+                        <Badge variant="secondary">
+                          {contentType.replace('_', ' ').toUpperCase()}
+                        </Badge>
+                        <Badge variant="secondary">
+                          {platform.toUpperCase()}
+                        </Badge>
+                        <Badge variant="secondary">
+                          {tone.toUpperCase()}
+                        </Badge>
+                        <Badge variant="secondary">
+                          {length.toUpperCase()}
+                        </Badge>
+                        {includeEmojis && <Badge variant="outline">Emojis</Badge>}
+                        {includeHashtags && <Badge variant="outline">Hashtags</Badge>}
+                      </div>
+                    </>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center min-h-[300px] text-center">
+                      <Sparkles className="h-12 w-12 text-muted-foreground mb-4" />
+                      <p className="text-muted-foreground">
+                        Configure your settings and enter a prompt to generate content
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Content Analyzer */}
+              <ContentAnalyzer content={generatedContent} />
+
+              {/* Content Variations */}
+              <ContentVariations 
+                baseContent={generatedContent}
+                onSelectVariation={setGeneratedContent}
+              />
+            </div>
+
+            {/* Right Sidebar - Settings & Tools */}
+            <div className="space-y-4">
+              {/* Content Settings */}
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
@@ -858,170 +1038,13 @@ export default function AIGeneratorPage() {
                   )}
                 </CardContent>
               </Card>
-            </div>
 
-            {/* Right Side - Prompt & Output */}
-            <div className="space-y-4">
-              {/* Prompt Card */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Wand2 className="h-5 w-5 text-primary" />
-                    Your Prompt
-                  </CardTitle>
-                  <CardDescription>
-                    Describe what you want to create
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <Textarea
-                    placeholder="E.g., Write a post about our new product launch that highlights the key features and benefits..."
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    rows={6}
-                    className="resize-none"
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Be specific about what you want to create
-                  </p>
-                  <Button
-                    onClick={handleGenerate}
-                    disabled={generating || !prompt.trim() || !planLimits?.allowed || loadingLimits}
-                    className="w-full cursor-pointer"
-                  >
-                    {generating ? (
-                      <>
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        Generating...
-                      </>
-                    ) : (
-                      <>
-                        <Wand2 className="h-4 w-4 mr-2" />
-                        Generate Content
-                      </>
-                    )}
-                  </Button>
-                </CardContent>
-              </Card>
-
-              {/* Output Card */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Sparkles className="h-5 w-5 text-primary" />
-                    Generated Content
-                  </CardTitle>
-                  <CardDescription>
-                    Your AI-generated content will appear here
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {generatedContent ? (
-                    <>
-                      <div className="relative">
-                        <div className="bg-muted p-4 rounded-lg min-h-[300px] max-h-[500px] overflow-y-auto whitespace-pre-wrap">
-                          {generatedContent}
-                        </div>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="absolute top-2 right-2 cursor-pointer"
-                          onClick={handleCopy}
-                        >
-                          {copied ? (
-                            <>
-                              <Check className="h-4 w-4 mr-2 text-green-500" />
-                              Copied!
-                            </>
-                          ) : (
-                            <>
-                              <Copy className="h-4 w-4 mr-2" />
-                              Copy
-                            </>
-                          )}
-                        </Button>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-2">
-                        <Button
-                          variant="outline"
-                          className="cursor-pointer"
-                          onClick={handleGenerate}
-                          disabled={generating || !planLimits?.allowed}
-                        >
-                          <Wand2 className="h-4 w-4 mr-2" />
-                          Regenerate
-                        </Button>
-                        <Button
-                          variant="outline"
-                          className="cursor-pointer"
-                          onClick={handleSave}
-                          disabled={saving || !user}
-                        >
-                          {saving ? (
-                            <>
-                              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                              Saving...
-                            </>
-                          ) : (
-                            <>
-                              <Save className="h-4 w-4 mr-2" />
-                              Save
-                            </>
-                          )}
-                        </Button>
-                        <ExportOptions 
-                          content={generatedContent}
-                          metadata={{
-                            contentType,
-                            platform,
-                            tone,
-                            length
-                          }}
-                        />
-                        <Button
-                          variant="default"
-                          className="cursor-pointer"
-                          onClick={() => toast.info("Post scheduling coming soon!")}
-                        >
-                          <Calendar className="h-4 w-4 mr-2" />
-                          Schedule
-                        </Button>
-                      </div>
-
-                      <div className="flex flex-wrap gap-2">
-                        <Badge variant="secondary">
-                          {contentType.replace('_', ' ').toUpperCase()}
-                        </Badge>
-                        <Badge variant="secondary">
-                          {platform.toUpperCase()}
-                        </Badge>
-                        <Badge variant="secondary">
-                          {tone.toUpperCase()}
-                        </Badge>
-                        <Badge variant="secondary">
-                          {length.toUpperCase()}
-                        </Badge>
-                        {includeEmojis && <Badge variant="outline">Emojis</Badge>}
-                        {includeHashtags && <Badge variant="outline">Hashtags</Badge>}
-                      </div>
-                    </>
-                  ) : (
-                    <div className="flex flex-col items-center justify-center min-h-[300px] text-center">
-                      <Sparkles className="h-12 w-12 text-muted-foreground mb-4" />
-                      <p className="text-muted-foreground">
-                        Configure your settings and enter a prompt to generate content
-                      </p>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Right Sidebar - Analysis & Suggestions */}
-            <div className="space-y-4">
-              {/* Content Analyzer */}
-              <ContentAnalyzer content={generatedContent} />
+              {/* Brand Voice Selector */}
+              <BrandVoiceSelector 
+                value={brandVoice}
+                onChange={setBrandVoice}
+                userPlan={userPlan}
+              />
 
               {/* AI Suggestions */}
               <AISuggestions 
@@ -1030,19 +1053,6 @@ export default function AIGeneratorPage() {
                 onApplySuggestion={(suggestion) => {
                   setPrompt(prev => prev + " " + suggestion)
                 }}
-              />
-
-              {/* Content Variations */}
-              <ContentVariations 
-                baseContent={generatedContent}
-                onSelectVariation={setGeneratedContent}
-              />
-
-              {/* Brand Voice Selector */}
-              <BrandVoiceSelector 
-                value={brandVoice}
-                onChange={setBrandVoice}
-                userPlan={userPlan}
               />
 
               {/* Advanced Settings Toggle */}
@@ -1101,26 +1111,30 @@ export default function AIGeneratorPage() {
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 md:grid-cols-4">
-                <div>
-                  <h4 className="font-medium mb-2">Be Specific</h4>
+                <div className="flex flex-col items-start gap-2">
+                  <Lightbulb className="h-5 w-5 text-primary" />
+                  <h4 className="font-medium">Be Specific</h4>
                   <p className="text-sm text-muted-foreground">
                     Include details about your product, service, or topic for more relevant content
                   </p>
                 </div>
-                <div>
-                  <h4 className="font-medium mb-2">Use Keywords</h4>
+                <div className="flex flex-col items-start gap-2">
+                  <Hash className="h-5 w-5 text-primary" />
+                  <h4 className="font-medium">Use Keywords</h4>
                   <p className="text-sm text-muted-foreground">
                     Add relevant keywords to help the AI understand your focus areas
                   </p>
                 </div>
-                <div>
-                  <h4 className="font-medium mb-2">Choose Length</h4>
+                <div className="flex flex-col items-start gap-2">
+                  <FileType className="h-5 w-5 text-primary" />
+                  <h4 className="font-medium">Choose Length</h4>
                   <p className="text-sm text-muted-foreground">
                     Select short for quick posts, medium for standard, or long for detailed content
                   </p>
                 </div>
-                <div>
-                  <h4 className="font-medium mb-2">Save & Iterate</h4>
+                <div className="flex flex-col items-start gap-2">
+                  <RefreshCw className="h-5 w-5 text-primary" />
+                  <h4 className="font-medium">Save & Iterate</h4>
                   <p className="text-sm text-muted-foreground">
                     Save good results to history and regenerate to explore variations
                   </p>

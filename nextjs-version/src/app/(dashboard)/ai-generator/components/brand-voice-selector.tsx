@@ -15,8 +15,8 @@ interface BrandVoiceSelectorProps {
 const brandVoices = [
   {
     id: "default",
-    name: "Default",
-    description: "Standard AI voice",
+    name: "Balanced",
+    description: "Neutral and versatile tone",
     available: ["free", "starter", "professional", "agency"]
   },
   {
@@ -26,27 +26,27 @@ const brandVoices = [
     available: ["professional", "agency"]
   },
   {
-    id: "casual",
-    name: "Casual & Friendly",
-    description: "Relaxed and approachable",
+    id: "conversational",
+    name: "Conversational",
+    description: "Friendly and approachable",
     available: ["professional", "agency"]
   },
   {
-    id: "enthusiastic",
-    name: "Enthusiastic",
-    description: "Energetic and exciting",
+    id: "bold",
+    name: "Bold & Confident",
+    description: "Strong and assertive voice",
     available: ["professional", "agency"]
   },
   {
-    id: "authoritative",
-    name: "Authoritative",
-    description: "Expert and confident",
+    id: "empathetic",
+    name: "Empathetic",
+    description: "Warm and understanding",
     available: ["agency"]
   },
   {
-    id: "storyteller",
-    name: "Storyteller",
-    description: "Narrative and engaging",
+    id: "thought_leader",
+    name: "Thought Leader",
+    description: "Expert and authoritative",
     available: ["agency"]
   }
 ]
