@@ -838,6 +838,13 @@ export default function AIGeneratorPage() {
                 baseContent={generatedContent}
                 onSelectVariation={setGeneratedContent}
               />
+
+              {/* Brand Voice Selector */}
+              <BrandVoiceSelector 
+                value={brandVoice}
+                onChange={setBrandVoice}
+                userPlan={userPlan}
+              />
             </div>
 
             {/* Right Sidebar - Settings & Tools */}
@@ -1038,13 +1045,6 @@ export default function AIGeneratorPage() {
                   )}
                 </CardContent>
               </Card>
-
-              {/* Brand Voice Selector */}
-              <BrandVoiceSelector 
-                value={brandVoice}
-                onChange={setBrandVoice}
-                userPlan={userPlan}
-              />
 
               {/* AI Suggestions */}
               <AISuggestions 
