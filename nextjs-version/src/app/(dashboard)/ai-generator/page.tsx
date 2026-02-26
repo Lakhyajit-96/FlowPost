@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Progress } from "@/components/ui/progress"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Sparkles, Copy, Check, Loader2, Wand2, Save, History, Trash2, Calendar, Crown, Zap, Lock, Target, Lightbulb, AlertCircle, Download, Share2, RefreshCw, BookOpen, Sliders, Brain, MessageSquare, BarChart3, FileText } from "lucide-react"
+import { Sparkles, Copy, Check, Loader2, Wand2, Save, History, Trash2, Calendar, Crown, Zap, Lock, Target, Lightbulb, AlertCircle, BookOpen, Sliders, FileType, Hash, MessageCircle, Smile, Settings2 } from "lucide-react"
 import { toast } from "sonner"
 import { useUser } from "@clerk/nextjs"
 import { createClient } from "@/lib/supabase/client"
@@ -130,7 +130,7 @@ export default function AIGeneratorPage() {
       startOfMonth.setDate(1)
       startOfMonth.setHours(0, 0, 0, 0)
 
-      const { data: usageData, error: usageError } = await supabase
+      const { data: usageData } = await supabase
         .from('ai_generated_content')
         .select('id', { count: 'exact' })
         .eq('user_id', user.id)
@@ -665,14 +665,20 @@ export default function AIGeneratorPage() {
             <div className="space-y-4">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">Content Settings</CardTitle>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Settings2 className="h-5 w-5 text-primary" />
+                    Content Settings
+                  </CardTitle>
                   <CardDescription>
                     Configure your content generation preferences
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="content-type">Content Type</Label>
+                    <Label htmlFor="content-type" className="flex items-center gap-2">
+                      <FileType className="h-4 w-4" />
+                      Content Type
+                    </Label>
                     <Select value={contentType} onValueChange={setContentType}>
                       <SelectTrigger id="content-type">
                         <SelectValue />
@@ -726,7 +732,10 @@ export default function AIGeneratorPage() {
 
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-2">
-                      <Label htmlFor="platform">Platform</Label>
+                      <Label htmlFor="platform" className="flex items-center gap-2">
+                        <Sparkles className="h-4 w-4" />
+                        Platform
+                      </Label>
                       <Select value={platform} onValueChange={setPlatform}>
                         <SelectTrigger id="platform">
                           <SelectValue />
@@ -743,7 +752,10 @@ export default function AIGeneratorPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="length">Length</Label>
+                      <Label htmlFor="length" className="flex items-center gap-2">
+                        <FileType className="h-4 w-4" />
+                        Length
+                      </Label>
                       <Select value={length} onValueChange={setLength}>
                         <SelectTrigger id="length">
                           <SelectValue />
@@ -758,7 +770,10 @@ export default function AIGeneratorPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="tone">Tone</Label>
+                    <Label htmlFor="tone" className="flex items-center gap-2">
+                      <MessageCircle className="h-4 w-4" />
+                      Tone
+                    </Label>
                     <Select value={tone} onValueChange={setTone}>
                       <SelectTrigger id="tone">
                         <SelectValue />
@@ -774,7 +789,10 @@ export default function AIGeneratorPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="keywords">Keywords (comma-separated)</Label>
+                    <Label htmlFor="keywords" className="flex items-center gap-2">
+                      <Hash className="h-4 w-4" />
+                      Keywords (comma-separated)
+                    </Label>
                     <Input
                       id="keywords"
                       placeholder="e.g., automation, analytics, scheduling"
@@ -788,7 +806,10 @@ export default function AIGeneratorPage() {
 
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <Label htmlFor="emojis" className="cursor-pointer">Include Emojis</Label>
+                      <Label htmlFor="emojis" className="cursor-pointer flex items-center gap-2">
+                        <Smile className="h-4 w-4" />
+                        Include Emojis
+                      </Label>
                       <Switch
                         id="emojis"
                         checked={includeEmojis}
@@ -796,7 +817,10 @@ export default function AIGeneratorPage() {
                       />
                     </div>
                     <div className="flex items-center justify-between">
-                      <Label htmlFor="hashtags" className="cursor-pointer">Include Hashtags</Label>
+                      <Label htmlFor="hashtags" className="cursor-pointer flex items-center gap-2">
+                        <Hash className="h-4 w-4" />
+                        Include Hashtags
+                      </Label>
                       <Switch
                         id="hashtags"
                         checked={includeHashtags}
@@ -834,41 +858,6 @@ export default function AIGeneratorPage() {
                   )}
                 </CardContent>
               </Card>
-
-              {/* Brand Voice Selector */}
-              <BrandVoiceSelector 
-                value={brandVoice}
-                onChange={setBrandVoice}
-                userPlan={userPlan}
-              />
-
-              {/* Advanced Settings Toggle */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <Sliders className="h-4 w-4 text-primary" />
-                    Advanced Settings
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="advanced" className="cursor-pointer">Show Advanced Options</Label>
-                    <Switch
-                      id="advanced"
-                      checked={showAdvanced}
-                      onCheckedChange={setShowAdvanced}
-                    />
-                  </div>
-                  {showAdvanced && (
-                    <div className="mt-4 space-y-3 text-sm text-muted-foreground">
-                      <p>• Custom temperature control</p>
-                      <p>• Token limit adjustment</p>
-                      <p>• Model selection</p>
-                      <Badge variant="secondary" className="text-xs">Coming Soon</Badge>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
             </div>
 
             {/* Right Side - Prompt & Output */}
@@ -876,7 +865,10 @@ export default function AIGeneratorPage() {
               {/* Prompt Card */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">Your Prompt</CardTitle>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Wand2 className="h-5 w-5 text-primary" />
+                    Your Prompt
+                  </CardTitle>
                   <CardDescription>
                     Describe what you want to create
                   </CardDescription>
@@ -915,7 +907,10 @@ export default function AIGeneratorPage() {
               {/* Output Card */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">Generated Content</CardTitle>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Sparkles className="h-5 w-5 text-primary" />
+                    Generated Content
+                  </CardTitle>
                   <CardDescription>
                     Your AI-generated content will appear here
                   </CardDescription>
@@ -1043,6 +1038,41 @@ export default function AIGeneratorPage() {
                 onSelectVariation={setGeneratedContent}
               />
 
+              {/* Brand Voice Selector */}
+              <BrandVoiceSelector 
+                value={brandVoice}
+                onChange={setBrandVoice}
+                userPlan={userPlan}
+              />
+
+              {/* Advanced Settings Toggle */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <Sliders className="h-4 w-4 text-primary" />
+                    Advanced Settings
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="advanced" className="cursor-pointer">Show Advanced Options</Label>
+                    <Switch
+                      id="advanced"
+                      checked={showAdvanced}
+                      onCheckedChange={setShowAdvanced}
+                    />
+                  </div>
+                  {showAdvanced && (
+                    <div className="mt-4 space-y-3 text-sm text-muted-foreground">
+                      <p>• Custom temperature control</p>
+                      <p>• Token limit adjustment</p>
+                      <p>• Model selection</p>
+                      <Badge variant="secondary" className="text-xs">Coming Soon</Badge>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
               {/* Quick Tips */}
               <Card>
                 <CardHeader>
@@ -1103,7 +1133,10 @@ export default function AIGeneratorPage() {
         <TabsContent value="history" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Generation History</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <History className="h-5 w-5 text-primary" />
+                Generation History
+              </CardTitle>
               <CardDescription>
                 View and reuse your previously generated content
               </CardDescription>
@@ -1203,7 +1236,10 @@ export default function AIGeneratorPage() {
         <TabsContent value="templates" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Content Templates</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <Lightbulb className="h-5 w-5 text-primary" />
+                Content Templates
+              </CardTitle>
               <CardDescription>
                 Quick-start templates for common content types
               </CardDescription>
