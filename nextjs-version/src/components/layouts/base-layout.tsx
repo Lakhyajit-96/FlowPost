@@ -4,7 +4,6 @@ import * as React from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
-import { ThemeCustomizer, ThemeCustomizerTrigger } from "@/components/theme-customizer"
 import { UpgradeToProButton } from "@/components/upgrade-to-pro-button"
 import { useSidebarConfig } from "@/hooks/use-sidebar-config"
 import {
@@ -19,8 +18,21 @@ interface BaseLayoutProps {
 }
 
 export function BaseLayout({ children, title, description }: BaseLayoutProps) {
-  const [themeCustomizerOpen, setThemeCustomizerOpen] = React.useState(false)
   const { config } = useSidebarConfig()
+
+  // Clear any inline theme styles on mount to ensure CSS takes precedence
+  React.useEffect(() => {
+    const root = document.documentElement
+    const inlineStyles = root.style
+    
+    // Remove all CSS variable inline styles
+    for (let i = inlineStyles.length - 1; i >= 0; i--) {
+      const property = inlineStyles[i]
+      if (property.startsWith('--')) {
+        root.style.removeProperty(property)
+      }
+    }
+  }, [])
 
   return (
     <SidebarProvider
@@ -93,12 +105,6 @@ export function BaseLayout({ children, title, description }: BaseLayoutProps) {
         </>
       )}
       
-      {/* Theme Customizer */}
-      <ThemeCustomizerTrigger onClick={() => setThemeCustomizerOpen(true)} />
-      <ThemeCustomizer 
-        open={themeCustomizerOpen} 
-        onOpenChange={setThemeCustomizerOpen} 
-      />
       <UpgradeToProButton />
     </SidebarProvider>
   )

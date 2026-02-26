@@ -1,181 +1,364 @@
 "use client"
 
 import {
+  Sparkles,
+  Calendar,
   BarChart3,
-  Zap,
   Users,
   ArrowRight,
-  Database,
-  Package,
-  Crown,
-  Layout,
-  Palette
+  Clock,
+  Zap,
+  Target,
+  TrendingUp
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Image3D } from '@/components/image-3d'
+import { AnimatedGrid, FloatingElements } from '@/components/effects'
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { useInView } from 'framer-motion'
+import { useRef, useState } from 'react'
 
 const mainFeatures = [
   {
-    icon: Package,
-    title: 'Curated Component Library',
-    description: 'Hand-picked blocks and templates for quality and reliability.'
+    icon: Sparkles,
+    title: 'AI Content Generation',
+    description: 'Create engaging posts, captions, and hashtags with AI in seconds.'
   },
   {
-    icon: Crown,
-    title: 'Free & Premium Options',
-    description: 'Start free, upgrade to premium collections when you need more.'
+    icon: Calendar,
+    title: 'Smart Scheduling',
+    description: 'Schedule posts across all platforms with optimal timing suggestions.'
   },
   {
-    icon: Layout,
-    title: 'Ready-to-Use Templates',
-    description: 'Copy-paste components that just work out of the box.'
+    icon: BarChart3,
+    title: 'Analytics Dashboard',
+    description: 'Track performance, engagement, and growth with beautiful insights.'
   },
   {
-    icon: Zap,
-    title: 'Regular Updates',
-    description: 'New blocks and templates added weekly to keep you current.'
+    icon: Clock,
+    title: 'Save 10+ Hours Weekly',
+    description: 'Automate your social media workflow and focus on your business.'
   }
 ]
 
 const secondaryFeatures = [
   {
-    icon: BarChart3,
-    title: 'Multiple Frameworks',
-    description: 'React, Next.js, and Vite compatibility for flexible development.'
-  },
-  {
-    icon: Palette,
-    title: 'Modern Tech Stack',
-    description: 'Built with shadcn/ui, Tailwind CSS, and TypeScript.'
+    icon: Target,
+    title: 'Multi-Platform Support',
+    description: 'Manage Instagram, Facebook, Twitter, LinkedIn from one dashboard.'
   },
   {
     icon: Users,
-    title: 'Responsive Design',
-    description: 'Mobile-first components for all screen sizes and devices.'
+    title: 'Team Collaboration',
+    description: 'Work together with your team, assign tasks, and approve content.'
   },
   {
-    icon: Database,
-    title: 'Developer-Friendly',
-    description: 'Clean code, well-documented, easy integration and customization.'
+    icon: TrendingUp,
+    title: 'Growth Insights',
+    description: 'Understand what works and optimize your content strategy.'
+  },
+  {
+    icon: Zap,
+    title: 'Lightning Fast',
+    description: 'Beautiful, responsive interface that works seamlessly on any device.'
   }
 ]
 
 export function FeaturesSection() {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: "-100px" })
+
+  const ref2 = useRef(null)
+  const isInView2 = useInView(ref2, { once: true, margin: "-100px" })
+
   return (
-    <section id="features" className="py-24 sm:py-32 bg-muted/30">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="features" className="relative py-24 sm:py-32 bg-muted/30 overflow-hidden">
+      {/* Background Effects */}
+      <AnimatedGrid variant="dots" />
+      <FloatingElements count={12} variant="shapes" />
+      
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="mx-auto max-w-2xl text-center mb-16">
-          <Badge variant="outline" className="mb-4">Marketplace Features</Badge>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mx-auto max-w-2xl text-center mb-16"
+        >
+          <Badge variant="outline" className="mb-4">Powerful Features</Badge>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
-            Everything you need to build amazing web applications
+            Everything you need to master social media
           </h2>
           <p className="text-lg text-muted-foreground">
-            Our marketplace provides curated blocks, templates, landing pages, and admin dashboards to help you build professional applications faster than ever.
+            FlowPost combines AI-powered content creation, smart scheduling, and analytics in one beautiful dashboard. 
+            Built for small businesses who want results without complexity.
           </p>
-        </div>
+        </motion.div>
 
         {/* First Feature Section */}
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-8 xl:gap-16 mb-24">
+        <div ref={ref} className="grid items-center gap-12 lg:grid-cols-2 lg:gap-8 xl:gap-16 mb-24">
           {/* Left Image */}
-          <Image3D
-            lightSrc="/feature-1-light.png"
-            darkSrc="/feature-1-dark.png"
-            alt="Analytics dashboard"
-            direction="left"
-          />
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+          >
+            <Image3D
+              lightSrc="/feature-1-light.png"
+              darkSrc="/feature-1-dark.png"
+              alt="AI Content Generation Dashboard"
+              direction="left"
+            />
+          </motion.div>
+
           {/* Right Content */}
-          <div className="space-y-6">
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+            className="space-y-6"
+          >
             <div className="space-y-4">
               <h3 className="text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
-                Components that accelerate development
+                Create content that engages in seconds
               </h3>
               <p className="text-muted-foreground text-base text-pretty">
-                Our curated marketplace offers premium blocks and templates designed to save time and ensure consistency across your admin projects.
+                Our AI understands your brand voice and generates compelling social media content instantly. 
+                From catchy captions to trending hashtags, FlowPost helps you stay consistent and creative.
               </p>
             </div>
 
             <ul className="grid gap-4 sm:grid-cols-2">
-              {mainFeatures.map((feature, index) => (
-                <li key={index} className="group hover:bg-accent/5 flex items-start gap-3 p-2 rounded-lg transition-colors">
-                  <div className="mt-0.5 flex shrink-0 items-center justify-center">
-                    <feature.icon className="size-5 text-primary" aria-hidden="true" />
-                  </div>
-                  <div>
-                    <h3 className="text-foreground font-medium">{feature.title}</h3>
-                    <p className="text-muted-foreground mt-1 text-sm">{feature.description}</p>
-                  </div>
-                </li>
-              ))}
+              {mainFeatures.map((feature, index) => {
+                const mouseX = useMotionValue(0)
+                const mouseY = useMotionValue(0)
+                const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [8, -8]), { stiffness: 300, damping: 30 })
+                const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-8, 8]), { stiffness: 300, damping: 30 })
+
+                return (
+                  <motion.li
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.5, delay: 0.3 + index * 0.1, ease: "easeOut" }}
+                    style={{
+                      rotateX,
+                      rotateY,
+                      transformStyle: "preserve-3d",
+                    }}
+                    onMouseMove={(e) => {
+                      const rect = e.currentTarget.getBoundingClientRect()
+                      const centerX = rect.left + rect.width / 2
+                      const centerY = rect.top + rect.height / 2
+                      mouseX.set((e.clientX - centerX) / rect.width)
+                      mouseY.set((e.clientY - centerY) / rect.height)
+                    }}
+                    onMouseLeave={() => {
+                      mouseX.set(0)
+                      mouseY.set(0)
+                    }}
+                    className="group hover:bg-accent/5 flex items-start gap-3 p-2 rounded-lg transition-colors"
+                  >
+                    <motion.div
+                      style={{ translateZ: 20 }}
+                      className="mt-0.5 flex shrink-0 items-center justify-center"
+                    >
+                      <feature.icon className="size-5 text-primary" aria-hidden="true" />
+                    </motion.div>
+                    <motion.div style={{ translateZ: 10 }}>
+                      <h3 className="text-foreground font-medium">{feature.title}</h3>
+                      <p className="text-muted-foreground mt-1 text-sm">{feature.description}</p>
+                    </motion.div>
+                  </motion.li>
+                )
+              })}
             </ul>
 
-            <div className="flex flex-col sm:flex-row gap-4 pe-4 pt-2">
-              <Button size="lg" className="cursor-pointer">
-                <a href="https://shadcnstore.com/templates" className='flex items-center'>
-                  Browse Templates
-                  <ArrowRight className="ms-2 size-4" aria-hidden="true" />
-                </a>
-              </Button>
-              <Button size="lg" variant="outline" className="cursor-pointer">
-                <a href="https://shadcnstore.com/blocks">
-                  View Components
-                </a>
-              </Button>
-            </div>
-          </div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 0.7, ease: "easeOut" }}
+              className="flex flex-col sm:flex-row gap-4 pe-4 pt-2"
+            >
+              {/* Bouncing Primary Button */}
+              <motion.div
+                whileHover={{ scale: 1.06, y: -3 }}
+                whileTap={{ scale: 0.94 }}
+                style={{ transformStyle: "preserve-3d" }}
+              >
+                <Button size="lg" className="cursor-pointer relative overflow-hidden group">
+                  <a href="/sign-up" className='flex items-center'>
+                    <motion.span
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                      animate={{ x: ['-200%', '200%'] }}
+                      transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                    />
+                    <span className="relative z-10">Start Free Trial</span>
+                    <motion.div
+                      className="relative z-10"
+                      animate={{ rotate: [0, 15, 0] }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                      <ArrowRight className="ms-2 size-4" aria-hidden="true" />
+                    </motion.div>
+                  </a>
+                </Button>
+              </motion.div>
+
+              {/* Glowing Outline Button */}
+              <motion.div
+                whileHover={{ scale: 1.06, y: -3 }}
+                whileTap={{ scale: 0.94 }}
+              >
+                <Button size="lg" variant="outline" className="cursor-pointer relative group">
+                  <motion.div
+                    className="absolute inset-0 rounded-lg bg-primary/10"
+                    initial={{ opacity: 0 }}
+                    whileHover={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                  <a href="#pricing" className="relative z-10">
+                    View Pricing
+                  </a>
+                </Button>
+              </motion.div>
+            </motion.div>
+          </motion.div>
         </div>
 
         {/* Second Feature Section - Flipped Layout */}
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-8 xl:gap-16">
+        <div ref={ref2} className="grid items-center gap-12 lg:grid-cols-2 lg:gap-8 xl:gap-16">
           {/* Left Content */}
-          <div className="space-y-6 order-2 lg:order-1">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={isInView2 ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="space-y-6 order-2 lg:order-1"
+          >
             <div className="space-y-4">
               <h3 className="text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
-                Built for modern development workflows
+                Grow your audience with data-driven insights
               </h3>
               <p className="text-muted-foreground text-base text-pretty">
-                Every component follows best practices with TypeScript, responsive design, and clean code architecture that integrates seamlessly into your projects.
+                Track what matters with beautiful analytics. See which posts perform best, when your audience is most active, 
+                and how your social presence is growing over time.
               </p>
             </div>
 
             <ul className="grid gap-4 sm:grid-cols-2">
-              {secondaryFeatures.map((feature, index) => (
-                <li key={index} className="group hover:bg-accent/5 flex items-start gap-3 p-2 rounded-lg transition-colors">
-                  <div className="mt-0.5 flex shrink-0 items-center justify-center">
-                    <feature.icon className="size-5 text-primary" aria-hidden="true" />
-                  </div>
-                  <div>
-                    <h3 className="text-foreground font-medium">{feature.title}</h3>
-                    <p className="text-muted-foreground mt-1 text-sm">{feature.description}</p>
-                  </div>
-                </li>
-              ))}
+              {secondaryFeatures.map((feature, index) => {
+                const mouseX = useMotionValue(0)
+                const mouseY = useMotionValue(0)
+                const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [8, -8]), { stiffness: 300, damping: 30 })
+                const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-8, 8]), { stiffness: 300, damping: 30 })
+
+                return (
+                  <motion.li
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={isInView2 ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.5, delay: 0.2 + index * 0.1, ease: "easeOut" }}
+                    style={{
+                      rotateX,
+                      rotateY,
+                      transformStyle: "preserve-3d",
+                    }}
+                    onMouseMove={(e) => {
+                      const rect = e.currentTarget.getBoundingClientRect()
+                      const centerX = rect.left + rect.width / 2
+                      const centerY = rect.top + rect.height / 2
+                      mouseX.set((e.clientX - centerX) / rect.width)
+                      mouseY.set((e.clientY - centerY) / rect.height)
+                    }}
+                    onMouseLeave={() => {
+                      mouseX.set(0)
+                      mouseY.set(0)
+                    }}
+                    className="group hover:bg-accent/5 flex items-start gap-3 p-2 rounded-lg transition-colors"
+                  >
+                    <motion.div
+                      style={{ translateZ: 20 }}
+                      className="mt-0.5 flex shrink-0 items-center justify-center"
+                    >
+                      <feature.icon className="size-5 text-primary" aria-hidden="true" />
+                    </motion.div>
+                    <motion.div style={{ translateZ: 10 }}>
+                      <h3 className="text-foreground font-medium">{feature.title}</h3>
+                      <p className="text-muted-foreground mt-1 text-sm">{feature.description}</p>
+                    </motion.div>
+                  </motion.li>
+                )
+              })}
             </ul>
 
-            <div className="flex flex-col sm:flex-row gap-4 pe-4 pt-2">
-              <Button size="lg" className="cursor-pointer">
-                <a href="#" className='flex items-center'>
-                  View Documentation
-                  <ArrowRight className="ms-2 size-4" aria-hidden="true" />
-                </a>
-              </Button>
-              <Button size="lg" variant="outline" className="cursor-pointer">
-                <a href="https://github.com/silicondeck/shadcn-dashboard-landing-template" target="_blank" rel="noopener noreferrer">
-                  GitHub Repository
-                </a>
-              </Button>
-            </div>
-          </div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView2 ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 0.6, ease: "easeOut" }}
+              className="flex flex-col sm:flex-row gap-4 pe-4 pt-2"
+            >
+              {/* Ripple Effect Button */}
+              <motion.div
+                whileHover={{ scale: 1.06 }}
+                whileTap={{ scale: 0.94 }}
+                style={{ transformStyle: "preserve-3d" }}
+              >
+                <Button size="lg" className="cursor-pointer relative overflow-hidden">
+                  <a href="/dashboard" className='flex items-center'>
+                    <motion.div
+                      className="absolute inset-0 bg-white/20 rounded-full"
+                      initial={{ scale: 0, opacity: 0.5 }}
+                      whileHover={{ scale: 2, opacity: 0 }}
+                      transition={{ duration: 0.6 }}
+                    />
+                    <span className="relative z-10">View Demo Dashboard</span>
+                    <motion.div
+                      className="relative z-10"
+                      whileHover={{ x: 5 }}
+                      transition={{ type: "spring", stiffness: 400 }}
+                    >
+                      <ArrowRight className="ms-2 size-4" aria-hidden="true" />
+                    </motion.div>
+                  </a>
+                </Button>
+              </motion.div>
+
+              {/* Border Glow Button */}
+              <motion.div
+                whileHover={{ scale: 1.06 }}
+                whileTap={{ scale: 0.94 }}
+              >
+                <Button size="lg" variant="outline" className="cursor-pointer relative group">
+                  <motion.div
+                    className="absolute inset-0 rounded-lg border-2 border-primary/50"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileHover={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                  <a href="#faq" className="relative z-10">
+                    Learn More
+                  </a>
+                </Button>
+              </motion.div>
+            </motion.div>
+          </motion.div>
 
           {/* Right Image */}
-          <Image3D
-            lightSrc="/feature-2-light.png"
-            darkSrc="/feature-2-dark.png"
-            alt="Performance dashboard"
-            direction="right"
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={isInView2 ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
             className="order-1 lg:order-2"
-          />
+          >
+            <Image3D
+              lightSrc="/feature-2-light.png"
+              darkSrc="/feature-2-dark.png"
+              alt="Analytics and Performance Dashboard"
+              direction="right"
+            />
+          </motion.div>
         </div>
       </div>
     </section>

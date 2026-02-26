@@ -127,42 +127,33 @@ export function CommandSearch({ open, onOpenChange }: CommandSearchProps) {
   const commandRef = React.useRef<HTMLDivElement>(null)
 
   const searchItems: SearchItem[] = [
-    // Dashboards
-    { title: "Dashboard 1", url: "/dashboard", group: "Dashboards", icon: LayoutDashboard },
-    { title: "Dashboard 2", url: "/dashboard-2", group: "Dashboards", icon: LayoutPanelLeft },
+    // Dashboard
+    { title: "Dashboard", url: "/dashboard", group: "Dashboard", icon: LayoutDashboard },
+    { title: "Analytics", url: "/analytics", group: "Dashboard", icon: LayoutPanelLeft },
 
-    // Apps
-    { title: "Mail", url: "/mail", group: "Apps", icon: Mail },
-    { title: "Tasks", url: "/tasks", group: "Apps", icon: CheckSquare },
-    { title: "Chat", url: "/chat", group: "Apps", icon: MessageCircle },
-    { title: "Calendar", url: "/calendar", group: "Apps", icon: Calendar },
+    // Content
+    { title: "Posts", url: "/posts", group: "Content", icon: MessageCircle },
+    { title: "AI Generator", url: "/ai-generator", group: "Content", icon: MessageCircle },
+    { title: "Calendar", url: "/calendar", group: "Content", icon: Calendar },
+    { title: "Media Library", url: "/media", group: "Content", icon: Mail },
 
-    // Auth Pages
-    { title: "Sign In 1", url: "/auth/sign-in", group: "Auth Pages", icon: Shield },
-    { title: "Sign In 2", url: "/auth/sign-in-2", group: "Auth Pages", icon: Shield },
-    { title: "Sign Up 1", url: "/auth/sign-up", group: "Auth Pages", icon: Shield },
-    { title: "Sign Up 2", url: "/auth/sign-up-2", group: "Auth Pages", icon: Shield },
-    { title: "Forgot Password 1", url: "/auth/forgot-password", group: "Auth Pages", icon: Shield },
-    { title: "Forgot Password 2", url: "/auth/forgot-password-2", group: "Auth Pages", icon: Shield },
+    // Engagement
+    { title: "Comments", url: "/comments", group: "Engagement", icon: MessageCircle },
+    { title: "Messages", url: "/messages", group: "Engagement", icon: Mail },
 
-    // Errors
-    { title: "Unauthorized", url: "/errors/unauthorized", group: "Errors", icon: AlertTriangle },
-    { title: "Forbidden", url: "/errors/forbidden", group: "Errors", icon: AlertTriangle },
-    { title: "Not Found", url: "/errors/not-found", group: "Errors", icon: AlertTriangle },
-    { title: "Internal Server Error", url: "/errors/internal-server-error", group: "Errors", icon: AlertTriangle },
-    { title: "Under Maintenance", url: "/errors/under-maintenance", group: "Errors", icon: AlertTriangle },
+    // Management
+    { title: "Social Accounts", url: "/accounts", group: "Management", icon: Link2 },
+    { title: "Team", url: "/team", group: "Management", icon: User },
 
     // Settings
-    { title: "User Settings", url: "/settings/user", group: "Settings", icon: User },
-    { title: "Account Settings", url: "/settings/account", group: "Settings", icon: Settings },
+    { title: "Account Settings", url: "/settings/account", group: "Settings", icon: User },
     { title: "Plans & Billing", url: "/settings/billing", group: "Settings", icon: CreditCard },
     { title: "Appearance", url: "/settings/appearance", group: "Settings", icon: Palette },
     { title: "Notifications", url: "/settings/notifications", group: "Settings", icon: Bell },
-    { title: "Connections", url: "/settings/connections", group: "Settings", icon: Link2 },
 
     // Pages
-    { title: "FAQs", url: "/faqs", group: "Pages", icon: HelpCircle },
     { title: "Pricing", url: "/pricing", group: "Pages", icon: CreditCard },
+    { title: "FAQs", url: "/faqs", group: "Pages", icon: HelpCircle },
   ]
 
   const groupedItems = searchItems.reduce((acc, item) => {

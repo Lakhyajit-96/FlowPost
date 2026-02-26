@@ -22,6 +22,8 @@ import {
   Trash2,
   Download,
   Search,
+  Mail,
+  KeyRound,
 } from "lucide-react"
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -54,37 +56,29 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { UserFormDialog } from "./user-form-dialog"
-
-interface User {
-  id: number
-  name: string
-  email: string
-  avatar: string
-  role: string
-  plan: string
-  billing: string
-  status: string
-  joinedDate: string
-  lastLogin: string
-}
-
-interface UserFormValues {
-  name: string
-  email: string
-  role: string
-  plan: string
-  billing: string
-  status: string
-}
+import { TeamMember, TeamMemberFormValues } from "../page"
 
 interface DataTableProps {
-  users: User[]
-  onDeleteUser: (id: number) => void
-  onEditUser: (user: User) => void
-  onAddUser: (userData: UserFormValues) => void
+  users: TeamMember[]
+  onDeleteUser: (id: string) => void
+  onEditUser: (user: TeamMember) => void
+  onAddUser: (userData: TeamMemberFormValues) => void
+  onViewDetails: (user: TeamMember) => void
+  onSendEmail: (user: TeamMember) => void
+  onResetPassword: (user: TeamMember) => void
+  onExport: () => void
 }
 
-export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTableProps) {
+export function DataTable({ 
+  users, 
+  onDeleteUser, 
+  onEditUser, 
+  onAddUser,
+  onViewDetails,
+  onSendEmail,
+  onResetPassword,
+  onExport
+}: DataTableProps) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -108,26 +102,24 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
 
   const getRoleColor = (role: string) => {
     switch (role) {
-      case "Admin":
-        return "text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-900/20"
-      case "Editor":
-        return "text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-900/20"
-      case "Author":
-        return "text-yellow-600 bg-yellow-50 dark:text-yellow-400 dark:bg-yellow-900/20"
-      case "Maintainer":
-        return "text-green-600 bg-green-50 dark:text-green-400 dark:bg-green-900/20"
-      case "Subscriber":
+      case "owner":
         return "text-purple-600 bg-purple-50 dark:text-purple-400 dark:bg-purple-900/20"
+      case "admin":
+        return "text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-900/20"
+      case "editor":
+        return "text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-900/20"
+      case "viewer":
+        return "text-gray-600 bg-gray-50 dark:text-gray-400 dark:bg-gray-900/20"
       default:
         return "text-gray-600 bg-gray-50 dark:text-gray-400 dark:bg-gray-900/20"
     }
   }
 
-  const exactFilter = (row: Row<User>, columnId: string, value: string) => {
+  const exactFilter = (row: Row<TeamMember>, columnId: string, value: string) => {
     return row.getValue(columnId) === value
   }
 
-  const columns: ColumnDef<User>[] = [
+  const columns: ColumnDef<TeamMember>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -157,7 +149,7 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
     },
     {
       accessorKey: "name",
-      header: "User",
+      header: "Team Member",
       cell: ({ row }) => {
         const user = row.original
         return (
@@ -182,7 +174,7 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
         const role = row.getValue("role") as string
         return (
           <Badge variant="secondary" className={getRoleColor(role)}>
-            {role}
+            {role.charAt(0).toUpperCase() + role.slice(1)}
           </Badge>
         )
       },
@@ -198,14 +190,6 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
       filterFn: exactFilter,
     },
     {
-      accessorKey: "billing",
-      header: "Billing",
-      cell: ({ row }) => {
-        const billing = row.getValue("billing") as string
-        return <span className="text-sm">{billing}</span>
-      },
-    },
-    {
       accessorKey: "status",
       header: "Status",
       cell: ({ row }) => {
@@ -219,13 +203,27 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
       filterFn: exactFilter,
     },
     {
+      accessorKey: "created_at",
+      header: "Joined",
+      cell: ({ row }) => {
+        const date = new Date(row.getValue("created_at"))
+        return <span className="text-sm">{date.toLocaleDateString()}</span>
+      },
+    },
+    {
       id: "actions",
       header: "Actions",
       cell: ({ row }) => {
         const user = row.original
         return (
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="h-8 w-8 cursor-pointer">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-8 w-8 cursor-pointer"
+              onClick={() => onViewDetails(user)}
+              title="View details"
+            >
               <Eye className="size-4" />
               <span className="sr-only">View user</span>
             </Button>
@@ -234,6 +232,7 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
               size="icon"
               className="h-8 w-8 cursor-pointer"
               onClick={() => onEditUser(user)}
+              title="Edit user"
             >
               <Pencil className="size-4" />
               <span className="sr-only">Edit user</span>
@@ -246,23 +245,39 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem className="cursor-pointer">
+                <DropdownMenuItem 
+                  className="cursor-pointer"
+                  onClick={() => onViewDetails(user)}
+                >
+                  <Eye className="mr-2 size-4" />
                   View Details
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">
+                <DropdownMenuItem 
+                  className="cursor-pointer"
+                  onClick={() => onSendEmail(user)}
+                >
+                  <Mail className="mr-2 size-4" />
                   Send Email
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">
+                <DropdownMenuItem 
+                  className="cursor-pointer"
+                  onClick={() => onResetPassword(user)}
+                >
+                  <KeyRound className="mr-2 size-4" />
                   Reset Password
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   variant="destructive"
                   className="cursor-pointer"
-                  onClick={() => onDeleteUser(user.id)}
+                  onClick={() => {
+                    if (confirm(`Are you sure you want to remove ${user.name} from the team?`)) {
+                      onDeleteUser(user.id)
+                    }
+                  }}
                 >
                   <Trash2 className="mr-2 size-4" />
-                  Delete User
+                  Remove from Team
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -304,7 +319,7 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
           <div className="relative flex-1 max-w-sm">
             <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search users..."
+              placeholder="Search team members..."
               value={globalFilter ?? ""}
               onChange={(event) => setGlobalFilter(String(event.target.value))}
               className="pl-9"
@@ -312,7 +327,11 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          <Button variant="outline" className="cursor-pointer">
+          <Button 
+            variant="outline" 
+            className="cursor-pointer"
+            onClick={onExport}
+          >
             <Download className="mr-2 size-4" />
             Export
           </Button>
@@ -336,11 +355,10 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Roles</SelectItem>
-              <SelectItem value="Admin">Admin</SelectItem>
-              <SelectItem value="Author">Author</SelectItem>
-              <SelectItem value="Editor">Editor</SelectItem>
-              <SelectItem value="Maintainer">Maintainer</SelectItem>
-              <SelectItem value="Subscriber">Subscriber</SelectItem>
+              <SelectItem value="owner">Owner</SelectItem>
+              <SelectItem value="admin">Admin</SelectItem>
+              <SelectItem value="editor">Editor</SelectItem>
+              <SelectItem value="viewer">Viewer</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -359,9 +377,10 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Plans</SelectItem>
-              <SelectItem value="Basic">Basic</SelectItem>
+              <SelectItem value="Free">Free</SelectItem>
+              <SelectItem value="Starter">Starter</SelectItem>
               <SelectItem value="Professional">Professional</SelectItem>
-              <SelectItem value="Enterprise">Enterprise</SelectItem>
+              <SelectItem value="Agency">Agency</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -388,7 +407,6 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
           </Select>
         </div>
         <div className="space-y-2">
-
           <Label htmlFor="column-visibility" className="text-sm font-medium">
             Column Visibility
           </Label>
@@ -464,7 +482,7 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  No team members found. Add your first team member to get started.
                 </TableCell>
               </TableRow>
             )}
@@ -473,7 +491,6 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
       </div>
 
       <div className="flex items-center justify-between space-x-2 py-4">
-
         <div className="flex items-center space-x-2">
           <Label htmlFor="page-size" className="text-sm font-medium">
             Show

@@ -2,16 +2,8 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Menu, Github, LayoutDashboard, ChevronDown, X, Moon, Sun } from 'lucide-react'
+import { Menu, Moon, Sun, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from '@/components/ui/navigation-menu'
 import {
   Sheet,
   SheetContent,
@@ -19,43 +11,17 @@ import {
   SheetHeader,
   SheetTitle
 } from '@/components/ui/sheet'
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible'
 import { Logo } from '@/components/logo'
-import { MegaMenu } from '@/components/landing/mega-menu'
 import { ModeToggle } from '@/components/mode-toggle'
 import { useTheme } from '@/hooks/use-theme'
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 
 const navigationItems = [
   { name: 'Home', href: '#hero' },
   { name: 'Features', href: '#features' },
-  { name: 'Solutions', href: '#features', hasMegaMenu: true },
-  { name: 'Team', href: '#team' },
   { name: 'Pricing', href: '#pricing' },
   { name: 'FAQ', href: '#faq' },
   { name: 'Contact', href: '#contact' },
-]
-
-// Solutions menu items for mobile
-const solutionsItems = [
-  { title: 'Browse Products' },
-  { name: 'Free Blocks', href: '#free-blocks' },
-  { name: 'Premium Templates', href: '#premium-templates' },
-  { name: 'Admin Dashboards', href: '#admin-dashboards' },
-  { name: 'Landing Pages', href: '#landing-pages' },
-  { title: 'Categories' },
-  { name: 'E-commerce', href: '#ecommerce' },
-  { name: 'SaaS Dashboards', href: '#saas-dashboards' },
-  { name: 'Analytics', href: '#analytics' },
-  { name: 'Authentication', href: '#authentication' },
-  { title: 'Resources' },
-  { name: 'Documentation', href: '#docs' },
-  { name: 'Component Showcase', href: '#showcase' },
-  { name: 'GitHub Repository', href: '#github' },
-  { name: 'Design System', href: '#design-system' }
 ]
 
 // Smooth scroll function
@@ -73,202 +39,227 @@ const smoothScrollTo = (targetId: string) => {
 
 export function LandingNavbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const [solutionsOpen, setSolutionsOpen] = useState(false)
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const { setTheme, theme } = useTheme()
 
+  // 3D tilt effect for logo
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [5, -5]), { stiffness: 300, damping: 30 })
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-5, 5]), { stiffness: 300, damping: 30 })
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
+    <motion.header
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="sticky top-0 z-50 w-full border-b bg-background/95 supports-[backdrop-filter]:bg-background/95"
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
-        {/* Logo */}
-        <div className="flex items-center space-x-2">
-          <Link href="https://shadcnstore.com" className="flex items-center space-x-2 cursor-pointer" target='_blank' rel="noopener noreferrer">
-            <Logo size={32} />
-            <span className="font-bold">
-              ShadcnStore
-            </span>
+        {/* Logo with 3D effect */}
+        <motion.div
+          className="flex items-center space-x-2"
+          style={{
+            rotateX,
+            rotateY,
+            transformStyle: "preserve-3d",
+          }}
+          onMouseMove={(e) => {
+            const rect = e.currentTarget.getBoundingClientRect()
+            const centerX = rect.left + rect.width / 2
+            const centerY = rect.top + rect.height / 2
+            mouseX.set((e.clientX - centerX) / rect.width)
+            mouseY.set((e.clientY - centerY) / rect.height)
+          }}
+          onMouseLeave={() => {
+            mouseX.set(0)
+            mouseY.set(0)
+          }}
+          whileHover={{ scale: 1.05 }}
+          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+        >
+          <Link href="/" className="flex items-center space-x-2 cursor-pointer">
+            <motion.div style={{ translateZ: 20 }}>
+              <Logo size={32} />
+            </motion.div>
+            <motion.span
+              style={{ translateZ: 10 }}
+              className="font-bold text-xl"
+            >
+              FlowPost
+            </motion.span>
           </Link>
-        </div>
+        </motion.div>
 
-        {/* Desktop Navigation */}
-        <NavigationMenu className="hidden xl:flex">
-          <NavigationMenuList>
-            {navigationItems.map((item) => (
-              <NavigationMenuItem key={item.name}>
-                {item.hasMegaMenu ? (
-                  <>
-                    <NavigationMenuTrigger className="bg-transparent hover:bg-transparent focus:bg-transparent data-[active]:bg-transparent data-[state=open]:bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:text-primary focus:text-primary cursor-pointer">
-                      {item.name}
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <MegaMenu />
-                    </NavigationMenuContent>
-                  </>
-                ) : (
-                  <NavigationMenuLink
-                    className="group inline-flex h-10 w-max items-center justify-center px-4 py-2 text-sm font-medium transition-colors hover:text-primary focus:text-primary focus:outline-none cursor-pointer"
-                    onClick={(e: React.MouseEvent) => {
-                      e.preventDefault()
-                      if (item.href.startsWith('#')) {
-                        smoothScrollTo(item.href)
-                      } else {
-                        window.location.href = item.href
-                      }
-                    }}
-                  >
-                    {item.name}
-                  </NavigationMenuLink>
-                )}
-              </NavigationMenuItem>
-            ))}
-          </NavigationMenuList>
-        </NavigationMenu>
+        {/* Desktop Navigation with animated underline */}
+        <nav className="hidden md:flex items-center space-x-8">
+          {navigationItems.map((item, index) => (
+            <motion.div
+              key={item.name}
+              className="relative"
+              onHoverStart={() => setHoveredIndex(index)}
+              onHoverEnd={() => setHoveredIndex(null)}
+            >
+              <a
+                href={item.href}
+                className="text-sm font-medium transition-colors hover:text-primary cursor-pointer relative z-10"
+                onClick={(e: React.MouseEvent) => {
+                  e.preventDefault()
+                  if (item.href.startsWith('#')) {
+                    smoothScrollTo(item.href)
+                  } else {
+                    window.location.href = item.href
+                  }
+                }}
+              >
+                {item.name}
+              </a>
+              {hoveredIndex === index && (
+                <motion.div
+                  layoutId="navbar-hover"
+                  className="absolute inset-0 bg-primary/10 rounded-md -z-0"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  style={{ padding: '8px 12px', margin: '-8px -12px' }}
+                />
+              )}
+            </motion.div>
+          ))}
+        </nav>
 
-        {/* Desktop CTA */}
-        <div className="hidden xl:flex items-center space-x-2">
-          <ModeToggle variant="ghost" />
-          <Button variant="ghost" size="icon" asChild className="cursor-pointer">
-            <a href="https://github.com/silicondeck/shadcn-dashboard-landing-template" target="_blank" rel="noopener noreferrer" aria-label="GitHub Repository">
-              <Github className="h-5 w-5" />
-            </a>
-          </Button>
-          <Button variant="outline" asChild className="cursor-pointer">
-            <Link href="/dashboard" target="_blank" rel="noopener noreferrer">
-              <LayoutDashboard className="h-4 w-4 mr-2" />
-              Dashboard
-            </Link>
-          </Button>
-          <Button variant="ghost" asChild className="cursor-pointer">
-            <Link href="/auth/sign-in">Sign In</Link>
-          </Button>
-          <Button asChild className="cursor-pointer">
-            <Link href="/auth/sign-up">Get Started</Link>
-          </Button>
-        </div>
-
-        {/* Mobile Menu */}
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild className="xl:hidden">
-            <Button variant="ghost" size="icon" className="cursor-pointer">
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">Toggle menu</span>
+        {/* Desktop CTA with 3D effects */}
+        <div className="hidden md:flex items-center space-x-2">
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <ModeToggle variant="ghost" />
+          </motion.div>
+          <motion.div
+            whileHover={{ scale: 1.05, rotateZ: -2 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Button variant="ghost" asChild className="cursor-pointer">
+              <Link href="/sign-in">Sign In</Link>
             </Button>
+          </motion.div>
+          <motion.div
+            whileHover={{ scale: 1.05, rotateZ: 2 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Button asChild className="cursor-pointer relative overflow-hidden group">
+              <Link href="/sign-up">
+                <motion.span
+                  className="absolute inset-0 bg-gradient-to-r from-primary/0 via-white/20 to-primary/0"
+                  initial={{ x: '-100%' }}
+                  whileHover={{ x: '100%' }}
+                  transition={{ duration: 0.6 }}
+                />
+                <span className="relative z-10">Start Free Trial</span>
+              </Link>
+            </Button>
+          </motion.div>
+        </div>
+
+        {/* Mobile Menu with animation */}
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <SheetTrigger asChild className="md:hidden">
+            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+              <Button variant="ghost" size="icon" className="cursor-pointer">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle menu</span>
+              </Button>
+            </motion.div>
           </SheetTrigger>
           <SheetContent side="right" className="w-full sm:w-[400px] p-0 gap-0 [&>button]:hidden overflow-hidden flex flex-col">
-            <div className="flex flex-col h-full">
+            <motion.div
+              initial={{ x: 100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: 100, opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="flex flex-col h-full"
+            >
               {/* Header */}
               <SheetHeader className="space-y-0 p-4 pb-2 border-b">
                 <div className="flex items-center gap-2">
-                  <div className="p-2 bg-primary/10 rounded-lg">
+                  <motion.div
+                    className="p-2 bg-primary/10 rounded-lg"
+                    whileHover={{ rotate: 360, scale: 1.1 }}
+                    transition={{ duration: 0.6 }}
+                  >
                     <Logo size={16} />
-                  </div>
-                  <SheetTitle className="text-lg font-semibold">ShadcnStore</SheetTitle>
+                  </motion.div>
+                  <SheetTitle className="text-lg font-semibold">FlowPost</SheetTitle>
                   <div className="ml-auto flex items-center gap-2">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-                      className="cursor-pointer h-8 w-8"
-                    >
-                      <Moon className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                      <Sun className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                    </Button>
-                    <Button variant="ghost" size="icon" asChild className="cursor-pointer h-8 w-8">
-                      <a href="https://github.com/silicondeck/shadcn-dashboard-landing-template" target="_blank" rel="noopener noreferrer" aria-label="GitHub Repository">
-                        <Github className="h-4 w-4" />
-                      </a>
-                    </Button>
-                    <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="cursor-pointer h-8 w-8">
-                      <X className="h-4 w-4" />
-                    </Button>
+                    <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+                        className="cursor-pointer h-8 w-8"
+                      >
+                        <Moon className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                        <Sun className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                      </Button>
+                    </motion.div>
+                    <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                      <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="cursor-pointer h-8 w-8">
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </motion.div>
                   </div>
                 </div>
               </SheetHeader>
 
-              {/* Navigation Links */}
+              {/* Navigation Links with stagger animation */}
               <div className="flex-1 overflow-y-auto">
                 <nav className="p-6 space-y-1">
-                  {navigationItems.map((item) => (
-                    <div key={item.name}>
-                      {item.hasMegaMenu ? (
-                        <Collapsible open={solutionsOpen} onOpenChange={setSolutionsOpen}>
-                          <CollapsibleTrigger className="flex items-center justify-between w-full px-4 py-3 text-base font-medium rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer">
-                            {item.name}
-                            <ChevronDown className={`h-4 w-4 transition-transform ${solutionsOpen ? 'rotate-180' : ''}`} />
-                          </CollapsibleTrigger>
-                          <CollapsibleContent className="pl-4 space-y-1">
-                            {solutionsItems.map((solution, index) => (
-                              solution.title ? (
-                                <div
-                                  key={`title-${index}`}
-                                  className="px-4 mt-5 py-2 text-xs font-semibold text-muted-foreground/50 uppercase tracking-wider"
-                                >
-                                  {solution.title}
-                                </div>
-                              ) : (
-                                <a
-                                  key={solution.name}
-                                  href={solution.href}
-                                  className="flex items-center px-4 py-2 text-sm rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer"
-                                  onClick={(e) => {
-                                    setIsOpen(false)
-                                    if (solution.href?.startsWith('#')) {
-                                      e.preventDefault()
-                                      setTimeout(() => smoothScrollTo(solution.href), 100)
-                                    }
-                                  }}
-                                >
-                                  {solution.name}
-                                </a>
-                              )
-                            ))}
-                          </CollapsibleContent>
-                        </Collapsible>
-                      ) : (
-                        <a
-                          href={item.href}
-                          className="flex items-center px-4 py-3 text-base font-medium rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer"
-                          onClick={(e) => {
-                            setIsOpen(false)
-                            if (item.href.startsWith('#')) {
-                              e.preventDefault()
-                              setTimeout(() => smoothScrollTo(item.href), 100)
-                            }
-                          }}
-                        >
-                          {item.name}
-                        </a>
-                      )}
-                    </div>
+                  {navigationItems.map((item, index) => (
+                    <motion.a
+                      key={item.name}
+                      href={item.href}
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: index * 0.1, duration: 0.3 }}
+                      whileHover={{ x: 10, backgroundColor: 'hsl(var(--accent))' }}
+                      className="flex items-center px-4 py-3 text-base font-medium rounded-lg transition-colors cursor-pointer"
+                      onClick={(e) => {
+                        setIsOpen(false)
+                        if (item.href.startsWith('#')) {
+                          e.preventDefault()
+                          setTimeout(() => smoothScrollTo(item.href), 100)
+                        }
+                      }}
+                    >
+                      {item.name}
+                    </motion.a>
                   ))}
                 </nav>
               </div>
 
               {/* Footer Actions */}
-              <div className="border-t p-6 space-y-4">
-
-                {/* Primary Actions */}
-                <div className="space-y-3">
-                  <Button variant="outline" size="lg" asChild className="w-full cursor-pointer">
-                    <Link href="/dashboard">
-                      <LayoutDashboard className="size-4" />
-                      Dashboard
-                    </Link>
-                  </Button>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    <Button variant="outline" size="lg" asChild className="cursor-pointer">
-                      <Link href="/auth/sign-in">Sign In</Link>
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.4, duration: 0.3 }}
+                className="border-t p-6 space-y-4"
+              >
+                <div className="grid grid-cols-2 gap-3">
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Button variant="outline" size="lg" asChild className="cursor-pointer w-full">
+                      <Link href="/sign-in">Sign In</Link>
                     </Button>
-                    <Button asChild size="lg" className="cursor-pointer" >
-                      <Link href="/auth/sign-up">Get Started</Link>
+                  </motion.div>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Button asChild size="lg" className="cursor-pointer w-full">
+                      <Link href="/sign-up">Start Free Trial</Link>
                     </Button>
-                  </div>
+                  </motion.div>
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </SheetContent>
         </Sheet>
       </div>
-    </header>
+    </motion.header>
   )
 }

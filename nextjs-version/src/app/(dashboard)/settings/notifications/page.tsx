@@ -8,16 +8,18 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Switch } from "@/components/ui/switch"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Bell, Mail, MessageSquare } from "lucide-react"
+import { useEffect, useState } from "react"
+import { toast } from "sonner"
+import { useUser } from "@clerk/nextjs"
 
 const notificationsFormSchema = z.object({
   emailSecurity: z.boolean(),
@@ -32,7 +34,6 @@ const notificationsFormSchema = z.object({
   channelEmail: z.boolean(),
   channelPush: z.boolean(),
   channelSms: z.boolean(),
-  // New notification table fields
   orderUpdatesEmail: z.boolean(),
   orderUpdatesBrowser: z.boolean(),
   orderUpdatesApp: z.boolean(),
@@ -51,6 +52,10 @@ const notificationsFormSchema = z.object({
 type NotificationsFormValues = z.infer<typeof notificationsFormSchema>
 
 export default function NotificationSettings() {
+  const { user } = useUser()
+  const [loading, setLoading] = useState(false)
+  const [fetching, setFetching] = useState(true)
+
   const form = useForm<NotificationsFormValues>({
     resolver: zodResolver(notificationsFormSchema),
     defaultValues: {
@@ -66,7 +71,6 @@ export default function NotificationSettings() {
       channelEmail: true,
       channelPush: true,
       channelSms: false,
-      // New notification table defaults
       orderUpdatesEmail: true,
       orderUpdatesBrowser: true,
       orderUpdatesApp: true,
@@ -83,9 +87,79 @@ export default function NotificationSettings() {
     },
   })
 
-  function onSubmit(data: NotificationsFormValues) {
-    console.log("Notifications settings submitted:", data)
-    // Here you would typically save the settings
+  useEffect(() => {
+    async function fetchPreferences() {
+      if (!user) return
+
+      try {
+        const response = await fetch('/api/notifications/preferences')
+        const data = await response.json()
+
+        if (response.ok && data.preferences) {
+          // Map database fields to form fields
+          form.reset({
+            emailSecurity: data.preferences.email_security,
+            emailUpdates: data.preferences.email_updates,
+            emailMarketing: data.preferences.email_marketing,
+            pushMessages: data.preferences.push_messages,
+            pushMentions: data.preferences.push_mentions,
+            pushTasks: data.preferences.push_tasks,
+            emailFrequency: data.preferences.email_frequency,
+            quietHoursStart: data.preferences.quiet_hours_start,
+            quietHoursEnd: data.preferences.quiet_hours_end,
+            channelEmail: data.preferences.channel_email,
+            channelPush: data.preferences.channel_push,
+            channelSms: data.preferences.channel_sms,
+            orderUpdatesEmail: data.preferences.order_updates_email,
+            orderUpdatesBrowser: data.preferences.order_updates_browser,
+            orderUpdatesApp: data.preferences.order_updates_app,
+            invoiceRemindersEmail: data.preferences.invoice_reminders_email,
+            invoiceRemindersBrowser: data.preferences.invoice_reminders_browser,
+            invoiceRemindersApp: data.preferences.invoice_reminders_app,
+            promotionalOffersEmail: data.preferences.promotional_offers_email,
+            promotionalOffersBrowser: data.preferences.promotional_offers_browser,
+            promotionalOffersApp: data.preferences.promotional_offers_app,
+            systemMaintenanceEmail: data.preferences.system_maintenance_email,
+            systemMaintenanceBrowser: data.preferences.system_maintenance_browser,
+            systemMaintenanceApp: data.preferences.system_maintenance_app,
+            notificationTiming: data.preferences.notification_timing,
+          })
+        }
+      } catch (error) {
+        console.error('Error fetching preferences:', error)
+        toast.error('Failed to load notification preferences')
+      } finally {
+        setFetching(false)
+      }
+    }
+
+    fetchPreferences()
+  }, [user, form])
+
+  async function onSubmit(data: NotificationsFormValues) {
+    setLoading(true)
+    try {
+      const response = await fetch('/api/notifications/preferences', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+
+      const result = await response.json()
+
+      if (response.ok) {
+        toast.success("Notification preferences saved successfully!")
+      } else {
+        toast.error(result.error || "Failed to save notification preferences")
+      }
+    } catch (error) {
+      console.error('Error saving preferences:', error)
+      toast.error("Failed to save notification preferences")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -97,6 +171,18 @@ export default function NotificationSettings() {
           </p>
         </div>
 
+        {fetching ? (
+          <Card>
+            <CardContent className="py-10">
+              <div className="flex items-center justify-center">
+                <div className="text-center space-y-2">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+                  <p className="text-sm text-muted-foreground">Loading preferences...</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
@@ -113,19 +199,19 @@ export default function NotificationSettings() {
                       control={form.control}
                       name="emailSecurity"
                       render={({ field }) => (
-                        <FormItem className="flex items-center space-x-3">
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                          <div className="space-y-1">
-                            <FormLabel>Security alerts</FormLabel>
+                        <FormItem className="flex items-center justify-between space-y-0 rounded-lg border p-4">
+                          <div className="space-y-0.5">
+                            <FormLabel className="text-base">Security alerts</FormLabel>
                             <p className="text-sm text-muted-foreground">
                               Get notified when there are security events on your account.
                             </p>
                           </div>
+                          <FormControl>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
                         </FormItem>
                       )}
                     />
@@ -133,19 +219,19 @@ export default function NotificationSettings() {
                       control={form.control}
                       name="emailUpdates"
                       render={({ field }) => (
-                        <FormItem className="flex items-center space-x-3">
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                          <div className="space-y-1">
-                            <FormLabel>Product updates</FormLabel>
+                        <FormItem className="flex items-center justify-between space-y-0 rounded-lg border p-4">
+                          <div className="space-y-0.5">
+                            <FormLabel className="text-base">Product updates</FormLabel>
                             <p className="text-sm text-muted-foreground">
                               Receive updates about new features and improvements.
                             </p>
                           </div>
+                          <FormControl>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
                         </FormItem>
                       )}
                     />
@@ -153,19 +239,19 @@ export default function NotificationSettings() {
                       control={form.control}
                       name="emailMarketing"
                       render={({ field }) => (
-                        <FormItem className="flex items-center space-x-3">
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                          <div className="space-y-1">
-                            <FormLabel>Marketing emails</FormLabel>
+                        <FormItem className="flex items-center justify-between space-y-0 rounded-lg border p-4">
+                          <div className="space-y-0.5">
+                            <FormLabel className="text-base">Marketing emails</FormLabel>
                             <p className="text-sm text-muted-foreground">
                               Receive emails about our latest offers and promotions.
                             </p>
                           </div>
+                          <FormControl>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
                         </FormItem>
                       )}
                     />
@@ -186,19 +272,19 @@ export default function NotificationSettings() {
                       control={form.control}
                       name="pushMessages"
                       render={({ field }) => (
-                        <FormItem className="flex items-center space-x-3">
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                          <div className="space-y-1">
-                            <FormLabel>New messages</FormLabel>
+                        <FormItem className="flex items-center justify-between space-y-0 rounded-lg border p-4">
+                          <div className="space-y-0.5">
+                            <FormLabel className="text-base">New messages</FormLabel>
                             <p className="text-sm text-muted-foreground">
                               Get notified when you receive new messages.
                             </p>
                           </div>
+                          <FormControl>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
                         </FormItem>
                       )}
                     />
@@ -206,19 +292,19 @@ export default function NotificationSettings() {
                       control={form.control}
                       name="pushMentions"
                       render={({ field }) => (
-                        <FormItem className="flex items-center space-x-3">
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                          <div className="space-y-1">
-                            <FormLabel>Mentions</FormLabel>
+                        <FormItem className="flex items-center justify-between space-y-0 rounded-lg border p-4">
+                          <div className="space-y-0.5">
+                            <FormLabel className="text-base">Mentions</FormLabel>
                             <p className="text-sm text-muted-foreground">
                               Get notified when someone mentions you.
                             </p>
                           </div>
+                          <FormControl>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
                         </FormItem>
                       )}
                     />
@@ -226,19 +312,19 @@ export default function NotificationSettings() {
                       control={form.control}
                       name="pushTasks"
                       render={({ field }) => (
-                        <FormItem className="flex items-center space-x-3">
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                          <div className="space-y-1">
-                            <FormLabel>Task updates</FormLabel>
+                        <FormItem className="flex items-center justify-between space-y-0 rounded-lg border p-4">
+                          <div className="space-y-0.5">
+                            <FormLabel className="text-base">Task updates</FormLabel>
                             <p className="text-sm text-muted-foreground">
                               Get notified about task assignments and updates.
                             </p>
                           </div>
+                          <FormControl>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
                         </FormItem>
                       )}
                     />
@@ -260,7 +346,7 @@ export default function NotificationSettings() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Email Frequency</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
                           <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select frequency" />
@@ -285,7 +371,7 @@ export default function NotificationSettings() {
                       control={form.control}
                       name="quietHoursStart"
                       render={({ field }) => (
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
                             <SelectTrigger className="w-50">
                               <SelectValue placeholder="Start" />
@@ -304,7 +390,7 @@ export default function NotificationSettings() {
                       control={form.control}
                       name="quietHoursEnd"
                       render={({ field }) => (
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
                             <SelectTrigger className="w-50">
                               <SelectValue placeholder="End" />
@@ -328,229 +414,239 @@ export default function NotificationSettings() {
                 <CardTitle>Notification Preferences</CardTitle>
                 <CardDescription>
                   We need permission from your browser to show notifications.{" "}
-                  <Button variant="link" className="p-0 h-auto text-primary">
+                  <Button 
+                    variant="link" 
+                    className="p-0 h-auto text-primary"
+                    type="button"
+                    onClick={() => {
+                      if ("Notification" in window) {
+                        Notification.requestPermission().then((permission) => {
+                          if (permission === "granted") {
+                            toast.success("Notification permission granted!")
+                          } else {
+                            toast.error("Notification permission denied")
+                          }
+                        })
+                      } else {
+                        toast.error("Notifications not supported in this browser")
+                      }
+                    }}
+                  >
                     Request Permission
                   </Button>
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="w-[200px]">TYPE</TableHead>
-                        <TableHead className="text-center">EMAIL</TableHead>
-                        <TableHead className="text-center">BROWSER</TableHead>
-                        <TableHead className="text-center">APP</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell className="font-medium">Order updates</TableCell>
-                        <TableCell className="text-center">
-                          <FormField
-                            control={form.control}
-                            name="orderUpdatesEmail"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <FormField
-                            control={form.control}
-                            name="orderUpdatesBrowser"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <FormField
-                            control={form.control}
-                            name="orderUpdatesApp"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell className="font-medium">Invoice reminders</TableCell>
-                        <TableCell className="text-center">
-                          <FormField
-                            control={form.control}
-                            name="invoiceRemindersEmail"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <FormField
-                            control={form.control}
-                            name="invoiceRemindersBrowser"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <FormField
-                            control={form.control}
-                            name="invoiceRemindersApp"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell className="font-medium">Promotional offers</TableCell>
-                        <TableCell className="text-center">
-                          <FormField
-                            control={form.control}
-                            name="promotionalOffersEmail"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <FormField
-                            control={form.control}
-                            name="promotionalOffersBrowser"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <FormField
-                            control={form.control}
-                            name="promotionalOffersApp"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell className="font-medium">System maintenance</TableCell>
-                        <TableCell className="text-center">
-                          <FormField
-                            control={form.control}
-                            name="systemMaintenanceEmail"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <FormField
-                            control={form.control}
-                            name="systemMaintenanceBrowser"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <FormField
-                            control={form.control}
-                            name="systemMaintenanceApp"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
+                  <div className="space-y-4">
+                    {/* Order Updates */}
+                    <div className="rounded-lg border p-4">
+                      <h4 className="font-medium mb-4">Order updates</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="orderUpdatesEmail"
+                          render={({ field }) => (
+                            <FormItem className="flex items-center justify-between space-y-0 rounded-md border p-3 bg-muted/30">
+                              <FormLabel className="text-sm font-normal">Email</FormLabel>
+                              <FormControl>
+                                <Switch
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="orderUpdatesBrowser"
+                          render={({ field }) => (
+                            <FormItem className="flex items-center justify-between space-y-0 rounded-md border p-3 bg-muted/30">
+                              <FormLabel className="text-sm font-normal">Browser</FormLabel>
+                              <FormControl>
+                                <Switch
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="orderUpdatesApp"
+                          render={({ field }) => (
+                            <FormItem className="flex items-center justify-between space-y-0 rounded-md border p-3 bg-muted/30">
+                              <FormLabel className="text-sm font-normal">App</FormLabel>
+                              <FormControl>
+                                <Switch
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Invoice Reminders */}
+                    <div className="rounded-lg border p-4">
+                      <h4 className="font-medium mb-4">Invoice reminders</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="invoiceRemindersEmail"
+                          render={({ field }) => (
+                            <FormItem className="flex items-center justify-between space-y-0 rounded-md border p-3 bg-muted/30">
+                              <FormLabel className="text-sm font-normal">Email</FormLabel>
+                              <FormControl>
+                                <Switch
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="invoiceRemindersBrowser"
+                          render={({ field }) => (
+                            <FormItem className="flex items-center justify-between space-y-0 rounded-md border p-3 bg-muted/30">
+                              <FormLabel className="text-sm font-normal">Browser</FormLabel>
+                              <FormControl>
+                                <Switch
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="invoiceRemindersApp"
+                          render={({ field }) => (
+                            <FormItem className="flex items-center justify-between space-y-0 rounded-md border p-3 bg-muted/30">
+                              <FormLabel className="text-sm font-normal">App</FormLabel>
+                              <FormControl>
+                                <Switch
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Promotional Offers */}
+                    <div className="rounded-lg border p-4">
+                      <h4 className="font-medium mb-4">Promotional offers</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="promotionalOffersEmail"
+                          render={({ field }) => (
+                            <FormItem className="flex items-center justify-between space-y-0 rounded-md border p-3 bg-muted/30">
+                              <FormLabel className="text-sm font-normal">Email</FormLabel>
+                              <FormControl>
+                                <Switch
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="promotionalOffersBrowser"
+                          render={({ field }) => (
+                            <FormItem className="flex items-center justify-between space-y-0 rounded-md border p-3 bg-muted/30">
+                              <FormLabel className="text-sm font-normal">Browser</FormLabel>
+                              <FormControl>
+                                <Switch
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="promotionalOffersApp"
+                          render={({ field }) => (
+                            <FormItem className="flex items-center justify-between space-y-0 rounded-md border p-3 bg-muted/30">
+                              <FormLabel className="text-sm font-normal">App</FormLabel>
+                              <FormControl>
+                                <Switch
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+
+                    {/* System Maintenance */}
+                    <div className="rounded-lg border p-4">
+                      <h4 className="font-medium mb-4">System maintenance</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="systemMaintenanceEmail"
+                          render={({ field }) => (
+                            <FormItem className="flex items-center justify-between space-y-0 rounded-md border p-3 bg-muted/30">
+                              <FormLabel className="text-sm font-normal">Email</FormLabel>
+                              <FormControl>
+                                <Switch
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="systemMaintenanceBrowser"
+                          render={({ field }) => (
+                            <FormItem className="flex items-center justify-between space-y-0 rounded-md border p-3 bg-muted/30">
+                              <FormLabel className="text-sm font-normal">Browser</FormLabel>
+                              <FormControl>
+                                <Switch
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="systemMaintenanceApp"
+                          render={({ field }) => (
+                            <FormItem className="flex items-center justify-between space-y-0 rounded-md border p-3 bg-muted/30">
+                              <FormLabel className="text-sm font-normal">App</FormLabel>
+                              <FormControl>
+                                <Switch
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+                  </div>
 
                   <div className="space-y-4">
                     <FormField
@@ -559,7 +655,7 @@ export default function NotificationSettings() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>When should we send you notifications?</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select onValueChange={field.onChange} value={field.value}>
                             <FormControl>
                               <SelectTrigger className="w-full max-w-sm">
                                 <SelectValue placeholder="Select timing" />
@@ -593,16 +689,16 @@ export default function NotificationSettings() {
                     control={form.control}
                     name="channelEmail"
                     render={({ field }) => (
-                      <FormItem className="flex items-center justify-between">
+                      <FormItem className="flex items-center justify-between space-y-0 rounded-lg border p-4">
                         <div className="flex items-center space-x-3">
                           <Mail className="h-5 w-5 text-muted-foreground" />
-                          <div>
-                            <FormLabel className="font-medium mb-1">Email</FormLabel>
+                          <div className="space-y-0.5">
+                            <FormLabel className="text-base font-medium">Email</FormLabel>
                             <div className="text-sm text-muted-foreground">Receive notifications via email</div>
                           </div>
                         </div>
                         <FormControl>
-                          <Checkbox
+                          <Switch
                             checked={field.value}
                             onCheckedChange={field.onChange}
                           />
@@ -610,21 +706,20 @@ export default function NotificationSettings() {
                       </FormItem>
                     )}
                   />
-                  <Separator />
                   <FormField
                     control={form.control}
                     name="channelPush"
                     render={({ field }) => (
-                      <FormItem className="flex items-center justify-between">
+                      <FormItem className="flex items-center justify-between space-y-0 rounded-lg border p-4">
                         <div className="flex items-center space-x-3">
                           <Bell className="h-5 w-5 text-muted-foreground" />
-                          <div>
-                            <FormLabel className="font-medium mb-1">Push Notifications</FormLabel>
+                          <div className="space-y-0.5">
+                            <FormLabel className="text-base font-medium">Push Notifications</FormLabel>
                             <div className="text-sm text-muted-foreground">Receive browser push notifications</div>
                           </div>
                         </div>
                         <FormControl>
-                          <Checkbox
+                          <Switch
                             checked={field.value}
                             onCheckedChange={field.onChange}
                           />
@@ -632,21 +727,20 @@ export default function NotificationSettings() {
                       </FormItem>
                     )}
                   />
-                  <Separator />
                   <FormField
                     control={form.control}
                     name="channelSms"
                     render={({ field }) => (
-                      <FormItem className="flex items-center justify-between">
+                      <FormItem className="flex items-center justify-between space-y-0 rounded-lg border p-4">
                         <div className="flex items-center space-x-3">
                           <MessageSquare className="h-5 w-5 text-muted-foreground" />
-                          <div>
-                            <FormLabel className="font-medium mb-1">SMS</FormLabel>
+                          <div className="space-y-0.5">
+                            <FormLabel className="text-base font-medium">SMS</FormLabel>
                             <div className="text-sm text-muted-foreground">Receive notifications via SMS</div>
                           </div>
                         </div>
                         <FormControl>
-                          <Checkbox
+                          <Switch
                             checked={field.value}
                             onCheckedChange={field.onChange}
                           />
@@ -659,11 +753,64 @@ export default function NotificationSettings() {
             </Card>
 
             <div className="flex space-x-2">
-              <Button type="submit" className="cursor-pointer">Save Preferences</Button>
-              <Button variant="outline" type="reset" className="cursor-pointer">Cancel</Button>
+              <Button type="submit" className="cursor-pointer" disabled={loading || fetching}>
+                {loading ? "Saving..." : "Save Preferences"}
+              </Button>
+              <Button 
+                variant="outline" 
+                type="button" 
+                className="cursor-pointer" 
+                disabled={fetching}
+                onClick={async () => {
+                  try {
+                    const response = await fetch('/api/notifications/preferences')
+                    const data = await response.json()
+
+                    if (response.ok && data.preferences) {
+                      form.reset({
+                        emailSecurity: data.preferences.email_security,
+                        emailUpdates: data.preferences.email_updates,
+                        emailMarketing: data.preferences.email_marketing,
+                        pushMessages: data.preferences.push_messages,
+                        pushMentions: data.preferences.push_mentions,
+                        pushTasks: data.preferences.push_tasks,
+                        emailFrequency: data.preferences.email_frequency,
+                        quietHoursStart: data.preferences.quiet_hours_start,
+                        quietHoursEnd: data.preferences.quiet_hours_end,
+                        channelEmail: data.preferences.channel_email,
+                        channelPush: data.preferences.channel_push,
+                        channelSms: data.preferences.channel_sms,
+                        orderUpdatesEmail: data.preferences.order_updates_email,
+                        orderUpdatesBrowser: data.preferences.order_updates_browser,
+                        orderUpdatesApp: data.preferences.order_updates_app,
+                        invoiceRemindersEmail: data.preferences.invoice_reminders_email,
+                        invoiceRemindersBrowser: data.preferences.invoice_reminders_browser,
+                        invoiceRemindersApp: data.preferences.invoice_reminders_app,
+                        promotionalOffersEmail: data.preferences.promotional_offers_email,
+                        promotionalOffersBrowser: data.preferences.promotional_offers_browser,
+                        promotionalOffersApp: data.preferences.promotional_offers_app,
+                        systemMaintenanceEmail: data.preferences.system_maintenance_email,
+                        systemMaintenanceBrowser: data.preferences.system_maintenance_browser,
+                        systemMaintenanceApp: data.preferences.system_maintenance_app,
+                        notificationTiming: data.preferences.notification_timing,
+                      })
+                      toast.info("Changes discarded")
+                    } else {
+                      form.reset()
+                      toast.info("Reset to defaults")
+                    }
+                  } catch (error) {
+                    form.reset()
+                    toast.info("Reset to defaults")
+                  }
+                }}
+              >
+                Cancel
+              </Button>
             </div>
           </form>
         </Form>
+        )}
       </div>
   )
 }

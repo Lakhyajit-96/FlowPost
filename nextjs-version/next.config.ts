@@ -6,19 +6,9 @@ const nextConfig: NextConfig = {
   },
   turbopack: {},
 
-  // Image optimization
+  // Disable image optimization for static images
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'ui.shadcn.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
-    ],
-    formats: ['image/webp', 'image/avif'],
+    unoptimized: true,
   },
 
   // Headers for better security and performance

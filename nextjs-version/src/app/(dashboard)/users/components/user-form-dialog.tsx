@@ -137,11 +137,10 @@ export function UserFormDialog({ onAddUser }: UserFormDialogProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="Admin">Admin</SelectItem>
-                        <SelectItem value="Author">Author</SelectItem>
-                        <SelectItem value="Editor">Editor</SelectItem>
-                        <SelectItem value="Maintainer">Maintainer</SelectItem>
-                        <SelectItem value="Subscriber">Subscriber</SelectItem>
+                        <SelectItem value="owner">Owner</SelectItem>
+                        <SelectItem value="admin">Admin</SelectItem>
+                        <SelectItem value="editor">Editor</SelectItem>
+                        <SelectItem value="viewer">Viewer</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -161,9 +160,10 @@ export function UserFormDialog({ onAddUser }: UserFormDialogProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="Basic">Basic</SelectItem>
+                        <SelectItem value="Free">Free</SelectItem>
+                        <SelectItem value="Starter">Starter</SelectItem>
                         <SelectItem value="Professional">Professional</SelectItem>
-                        <SelectItem value="Enterprise">Enterprise</SelectItem>
+                        <SelectItem value="Agency">Agency</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />

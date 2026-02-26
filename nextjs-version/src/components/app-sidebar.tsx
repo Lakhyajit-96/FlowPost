@@ -2,23 +2,25 @@
 
 import * as React from "react"
 import {
-  LayoutPanelLeft,
   LayoutDashboard,
-  Mail,
-  CheckSquare,
-  MessageCircle,
+  Sparkles,
+  ListChecks,
+  MessageSquare,
   Calendar,
-  Shield,
-  AlertTriangle,
   Settings,
-  HelpCircle,
-  CreditCard,
-  LayoutTemplate,
   Users,
+  BarChart3,
+  Instagram,
+  Facebook,
+  Linkedin,
+  Share2,
+  Youtube,
 } from "lucide-react"
+import { XIcon } from "@/components/icons/x-icon"
+import { PinterestIcon } from "@/components/icons/pinterest-icon"
 import Link from "next/link"
 import { Logo } from "@/components/logo"
-import { SidebarNotification } from "@/components/sidebar-notification"
+import { useUser } from "@clerk/nextjs"
 
 import { NavMain } from "@/components/nav-main"
 import { NavUser } from "@/components/nav-user"
@@ -33,176 +35,96 @@ import {
 } from "@/components/ui/sidebar"
 
 const data = {
-  user: {
-    name: "ShadcnStore",
-    email: "store@example.com",
-    avatar: "",
-  },
   navGroups: [
     {
-      label: "Dashboards",
+      label: "Overview",
       items: [
         {
-          title: "Dashboard 1",
+          title: "Analytics",
           url: "/dashboard",
-          icon: LayoutDashboard,
-        },
-        {
-          title: "Dashboard 2",
-          url: "/dashboard-2",
-          icon: LayoutPanelLeft,
+          icon: BarChart3,
         },
       ],
     },
     {
-      label: "Apps",
+      label: "Content",
       items: [
         {
-          title: "Mail",
+          title: "AI Content Generator",
           url: "/mail",
-          icon: Mail,
+          icon: Sparkles,
         },
         {
-          title: "Tasks",
+          title: "Post Queue",
           url: "/tasks",
-          icon: CheckSquare,
+          icon: ListChecks,
         },
         {
-          title: "Chat",
-          url: "/chat",
-          icon: MessageCircle,
-        },
-        {
-          title: "Calendar",
+          title: "Content Calendar",
           url: "/calendar",
           icon: Calendar,
         },
+      ],
+    },
+    {
+      label: "Engagement",
+      items: [
         {
-          title: "Users",
-          url: "/users",
-          icon: Users,
+          title: "Social Inbox",
+          url: "/chat",
+          icon: MessageSquare,
         },
       ],
     },
     {
-      label: "Pages",
+      label: "Management",
       items: [
         {
-          title: "Landing",
-          url: "/landing",
-          target: "_blank",
-          icon: LayoutTemplate,
-        },
-        {
-          title: "Auth Pages",
-          url: "#",
-          icon: Shield,
+          title: "Connected Accounts",
+          url: "/settings/connections",
+          icon: Share2,
           items: [
             {
-              title: "Sign In 1",
-              url: "/sign-in",
+              title: "Instagram",
+              url: "/settings/connections?platform=instagram",
+              icon: Instagram,
             },
             {
-              title: "Sign In 2",
-              url: "/sign-in-2",
+              title: "Facebook",
+              url: "/settings/connections?platform=facebook",
+              icon: Facebook,
             },
             {
-              title: "Sign In 3",
-              url: "/sign-in-3",
+              title: "X",
+              url: "/settings/connections?platform=twitter",
+              icon: XIcon,
             },
             {
-              title: "Sign Up 1",
-              url: "/sign-up",
+              title: "LinkedIn",
+              url: "/settings/connections?platform=linkedin",
+              icon: Linkedin,
             },
             {
-              title: "Sign Up 2",
-              url: "/sign-up-2",
+              title: "YouTube",
+              url: "/settings/connections?platform=youtube",
+              icon: Youtube,
             },
             {
-              title: "Sign Up 3",
-              url: "/sign-up-3",
-            },
-            {
-              title: "Forgot Password 1",
-              url: "/forgot-password",
-            },
-            {
-              title: "Forgot Password 2",
-              url: "/forgot-password-2",
-            },
-            {
-              title: "Forgot Password 3",
-              url: "/forgot-password-3",
-            }
-          ],
-        },
-        {
-          title: "Errors",
-          url: "#",
-          icon: AlertTriangle,
-          items: [
-            {
-              title: "Unauthorized",
-              url: "/errors/unauthorized",
-            },
-            {
-              title: "Forbidden",
-              url: "/errors/forbidden",
-            },
-            {
-              title: "Not Found",
-              url: "/errors/not-found",
-            },
-            {
-              title: "Internal Server Error",
-              url: "/errors/internal-server-error",
-            },
-            {
-              title: "Under Maintenance",
-              url: "/errors/under-maintenance",
+              title: "Pinterest",
+              url: "/settings/connections?platform=pinterest",
+              icon: PinterestIcon,
             },
           ],
         },
         {
-          title: "Settings",
-          url: "#",
+          title: "Team Members",
+          url: "/users",
+          icon: Users,
+        },
+        {
+          title: "Appearance",
+          url: "/settings/appearance",
           icon: Settings,
-          items: [
-            {
-              title: "User Settings",
-              url: "/settings/user",
-            },
-            {
-              title: "Account Settings",
-              url: "/settings/account",
-            },
-            {
-              title: "Plans & Billing",
-              url: "/settings/billing",
-            },
-            {
-              title: "Appearance",
-              url: "/settings/appearance",
-            },
-            {
-              title: "Notifications",
-              url: "/settings/notifications",
-            },
-            {
-              title: "Connections",
-              url: "/settings/connections",
-            },
-          ],
-        },
-        {
-          title: "FAQs",
-          url: "/faqs",
-          icon: HelpCircle,
-        },
-        {
-          title: "Pricing",
-          url: "/pricing",
-          icon: CreditCard,
         },
       ],
     },
@@ -210,6 +132,14 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user } = useUser()
+  
+  const userData = {
+    name: user?.fullName || user?.firstName || "User",
+    email: user?.primaryEmailAddress?.emailAddress || "",
+    avatar: user?.imageUrl || "",
+  }
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -221,8 +151,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <Logo size={24} className="text-current" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">ShadcnStore</span>
-                  <span className="truncate text-xs">Admin Dashboard</span>
+                  <span className="truncate font-medium">FlowPost</span>
+                  <span className="truncate text-xs">Social Media Manager</span>
                 </div>
               </Link>
             </SidebarMenuButton>
@@ -235,8 +165,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         ))}
       </SidebarContent>
       <SidebarFooter>
-        <SidebarNotification />
-        <NavUser user={data.user} />
+        <NavUser user={userData} />
       </SidebarFooter>
     </Sidebar>
   )

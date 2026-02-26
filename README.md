@@ -1,551 +1,626 @@
-# ShadCN Dashboard + Landing Page Template
+# FlowPost - AI-Powered Social Media Management SaaS
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-[![GitHub Stars](https://img.shields.io/github/stars/silicondeck/shadcn-dashboard-landing-template?style=social)](https://github.com/silicondeck/shadcn-dashboard-landing-template)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)](https://reactjs.org/)
-[![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Next.js](https://img.shields.io/badge/Next.js-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-![Dashboard Preview](vite-version/public/dashboard.png)
-
+![FlowPost Dashboard](nextjs-version/public/dashboard-light.png)
 
 <div align="center">
 
-🎯 <a href="https://shadcnstore.com/templates/dashboard/shadcn-dashboard-landing-template/dashboard" target="_blank">**View Live Demo**</a> | 🧩 <a href="https://shadcnstore.com/blocks" target="_blank">**Explore Premium Blocks**</a>
+**🚀 Production-Ready SaaS | 💰 Revenue-Ready | 🎨 Beautiful Design**
+
+[Live Demo](#) | [Documentation](#documentation) | [Get Started](#quick-start)
 
 </div>
 
-Introducing a sleek, modern, and open-source admin dashboard template built with the latest web technologies, including React + TypeScript + Vite and Next.js + TypeScript. Powered by shadcn/ui v3 and Tailwind CSS v4, this project offers a clean, responsive, and highly customizable UI. Developed and maintained by [ShadcnStore](https://shadcnstore.com), this free and open-source template is designed to accelerate your development process. Whether you're building an admin panel, SaaS dashboard, or launching an AI-driven product, this dashboard provides a beautiful, production-ready interface for your application — complete with a seamless dashboard and a fully-featured landing page to help you hit the ground running.
+---
 
-🚀 **Free & Open Source** by [**ShadcnStore**](https://shadcnstore.com) - Your gateway to premium UI components and templates.
+## 🎯 What is FlowPost?
 
+**FlowPost** is a production-ready AI-powered social media management SaaS platform that helps businesses, content creators, and agencies manage their social media presence effortlessly.
+
+### **The Vision**
+
+Build a profitable SaaS business that generates **$10K+ MRR** within 6 months by solving a real problem: social media management is time-consuming and complex. FlowPost makes it simple, automated, and AI-powered.
+
+### **The Problem We Solve**
+
+- ❌ Managing multiple social media accounts is overwhelming
+- ❌ Creating engaging content takes hours
+- ❌ Scheduling posts across platforms is tedious
+- ❌ Tracking analytics is scattered and confusing
+- ❌ Existing tools are expensive and complicated
+
+### **Our Solution**
+
+- ✅ Unified dashboard for all social media accounts
+- ✅ AI-powered content generation (captions, hashtags, ideas)
+- ✅ Smart post scheduling and automation
+- ✅ Real-time analytics and insights
+- ✅ Affordable pricing starting at $19/month
+- ✅ Beautiful, intuitive interface
 
 ---
 
-## 🌟 Live Demo
+## 💰 Business Model
 
-Experience the template in action:
+### **Pricing Plans**
 
-- **[🖥️ Dashboard Demo](https://shadcnstore.com/templates/dashboard/shadcn-dashboard-landing-template/dashboard)** - Complete admin dashboard with apps
-- **[🌐 Landing Page Demo](https://shadcnstore.com/templates/dashboard/shadcn-dashboard-landing-template/landing)** - Beautiful marketing landing page
+| Plan | Price | Target Customers | Features |
+|------|-------|------------------|----------|
+| **Starter** | $19/mo | Individuals, Small Businesses | 3 accounts, 30 posts/month, Basic analytics |
+| **Professional** | $49/mo | Content Creators, Growing Businesses | 10 accounts, 100 posts/month, AI generation, Advanced analytics |
+| **Agency** | $99/mo | Agencies, Large Teams | Unlimited accounts & posts, Team collaboration, White-label reports |
 
-> **Note**: This template includes both a complete dashboard (with mail, tasks, chat, calendar apps) and a marketing landing page in both Vite and Next.js versions.
+### **Revenue Projections**
 
----
+| Timeline | Sign-ups | Paying Customers | MRR | ARR |
+|----------|----------|------------------|-----|-----|
+| **Month 1** | 50 | 20 | $500 | $6,000 |
+| **Month 3** | 300 | 100 | $3,000 | $36,000 |
+| **Month 6** | 1,000 | 300 | $10,000 | $120,000 |
+| **Year 1** | 3,000 | 800 | $25,000 | $300,000 |
 
-## ✨ What's Included
+### **Cost Structure**
 
-🎯 **Two Complete Templates:**
+**Fixed Costs (Monthly)**:
+- Vercel Pro: $20
+- Supabase Pro: $25
+- OpenAI API: ~$100
+- Cloudinary: $89
+- Email Service: $10
+- **Total**: ~$245/month
 
-- **🖥️ Admin Dashboard** - Modern, feature-rich dashboard with 30+ pages
-- **🌐 Landing Page** - Business-ready landing page template
+**Variable Costs**: ~$0.60/user
 
-⚡ **Dual Framework Support:**
+**Break-Even**: 13 customers @ $19/month = $247
 
-- **Vite** - Lightning-fast development experience
-- **Next.js 15** - Production-ready with App Router
-
-🎨 **Live Theme Customization:**
-
-- **tweakcn integration** - Real-time theme editing
-- **Built-in customizer** - Preview all possible combinations live
-- **Multiple layouts** - Sidebar variants & collapsible options
-
----
-
-## 🚀 Key Features
-
-### 📊 **Dashboard Features**
-
-- **2 Dashboard Variants** - Overview & Analytics dashboards
-- **App Demos** - Mail, Tasks, Chat, Calendar, Users applications
-- **30+ Pages** - Authentication, Settings, Errors, FAQ, Pricing
-- **Data Tables** - Advanced tables with sorting, filtering, and pagination
-- **Charts & Analytics** - Recharts integration with beautiful visualizations
-
-### 🎨 **Design & Theming**
-
-- **Live Theme Customizer** - Real-time color and layout switching
-- **tweakcn Integration** - Professional theme management
-- **Multiple Layouts** - Sidebar variants, collapsible navigation
-- **Responsive Design** - Mobile-first approach with container queries
-- **Dark/Light Mode** - Seamless theme switching
-
-### ⚡ **Developer Experience**
-
-- **Modern Tech Stack** - React 19, TypeScript, Tailwind CSS v4
-- **Cross-Platform** - Works with both Vite and Next.js
-- **Type Safety** - Full TypeScript support throughout
-- **Component Library** - Latest shadcn/ui v3 with Radix UI
-- **Easy Customization** - Well-structured, modular codebase
+**Profit Margin**: 95%+ after break-even
 
 ---
 
-## 🏗️ Project Structure
+## ✨ Features
 
-```text
-📁 shadcn-dashboard/
-├── 📁 vite-version/              # Vite + React version
-│   ├── 📁 src/
-│   │   ├── 📁 app/               # Demo pages & applications
-│   │   │   ├── 📁 dashboard/     # Dashboard variants
-│   │   │   ├── 📁 dashboard-2/   # Alternative dashboard layout
-│   │   │   ├── 📁 landing/       # Landing page template
-│   │   │   ├── 📁 auth/          # Authentication pages
-│   │   │   ├── 📁 mail/          # Email application demo
-│   │   │   ├── 📁 tasks/         # Task management demo
-│   │   │   ├── 📁 chat/          # Chat application demo
-│   │   │   ├── 📁 calendar/      # Calendar demo
-│   │   │   ├── 📁 settings/      # User settings pages
-│   │   │   ├── 📁 errors/        # Error pages (404, 500, etc.)
-│   │   │   ├── 📁 users/         # User management pages
-│   │   │   ├── 📁 faqs/          # FAQ pages
-│   │   │   └── 📁 pricing/       # Pricing pages
-│   │   ├── 📁 components/        # UI components
-│   │   │   ├── 📁 ui/            # shadcn/ui v3 components
-│   │   │   ├── 📁 layouts/       # Layout components
-│   │   │   └── 📁 theme-customizer/ # Live theme editor
-│   │   ├── 📁 hooks/             # Custom React hooks
-│   │   ├── 📁 lib/               # Utilities & configurations
-│   │   └── 📁 types/             # TypeScript type definitions
-│   └── 📄 package.json           # Vite dependencies
-│
-├── 📁 nextjs-version/            # Next.js 15 version
-│   ├── 📁 src/
-│   │   ├── 📁 app/               # App Router with route groups
-│   │   │   ├── 📁 (auth)/        # Authentication route group
-│   │   │   │   ├── 📁 login/     # Login pages
-│   │   │   │   ├── 📁 signup/    # Registration pages
-│   │   │   │   ├── 📁 forgot-password/ # Password recovery
-│   │   │   │   └── 📁 errors/    # Error pages (404, 500, etc.)
-│   │   │   ├── 📁 (dashboard)/   # Dashboard route group
-│   │   │   │   ├── 📁 dashboard/ # Main dashboard
-│   │   │   │   ├── 📁 dashboard-2/ # Alternative dashboard
-│   │   │   │   ├── 📁 mail/      # Email application
-│   │   │   │   ├── 📁 tasks/     # Task management
-│   │   │   │   ├── 📁 chat/      # Chat application
-│   │   │   │   ├── 📁 calendar/  # Calendar demo
-│   │   │   │   ├── 📁 settings/  # User settings
-│   │   │   │   ├── 📁 users/     # User management
-│   │   │   │   ├── 📁 faqs/      # FAQ pages
-│   │   │   │   ├── 📁 pricing/   # Pricing pages
-│   │   │   │   └── 📄 layout.tsx # Dashboard layout
-│   │   │   ├── 📁 landing/       # Landing page template
-│   │   │   ├── 📄 layout.tsx     # Root layout
-│   │   │   ├── 📄 loading.tsx    # Global loading component
-│   │   │   ├── 📄 not-found.tsx  # 404 page
-│   │   │   └── 📄 page.tsx       # Homepage
-│   │   ├── 📁 components/        # Same component structure as Vite
-│   │   ├── 📁 hooks/             # Custom React hooks
-│   │   ├── 📁 lib/               # Utilities & configurations
-│   │   └── 📁 types/             # TypeScript type definitions
-│   └── 📄 package.json           # Next.js dependencies
-│
-├── 📄 README.md                  # This file
-└── 📄 LICENSE                    # MIT License
-```
+### **🎨 Beautiful Landing Page**
+- Modern, responsive design
+- Smooth animations with Framer Motion
+- 3D tilt effects and interactive elements
+- Clear value proposition and CTAs
+- Pricing section with 3 plans
+- Testimonials, FAQ, and contact sections
+- Dark/light mode support
+
+### **� Complete Dashboard**
+- Real-time social media analytics
+- Engagement metrics and trends
+- Platform distribution (Instagram, Facebook, Twitter, LinkedIn)
+- Recent posts with performance data
+- Top performing content
+- Audience insights (growth, demographics, regions)
+- Quick actions (AI Generate, New Post)
+
+### **� Authentication & Security**
+- Clerk integration for secure auth
+- Email/password and OAuth (Google, GitHub)
+- Email verification required
+- Session management
+- Route protection
+- User profile management
+
+### **� Payment Processing**
+- Stripe integration for subscriptions
+- 14-day free trial
+- Secure checkout flow
+- Webhook handling for subscription events
+- Customer portal for subscription management
+- Multiple pricing tiers
+
+### **�️ Database & Storage**
+- Supabase for data persistence
+- User management
+- Subscription tracking
+- Post history
+- Analytics data
+- Connected accounts
+
+### **🤖 AI Features (Coming Soon)**
+- OpenAI GPT-4 integration
+- Caption generation
+- Hashtag suggestions
+- Content ideas
+- Image descriptions
+- Tone/voice customization
+
+### **� Social Media Integration (Coming Soon)**
+- Instagram Graph API
+- Facebook Graph API
+- Twitter API v2
+- LinkedIn API
+- Post scheduling
+- Auto-posting
+- Comment management
 
 ---
 
-## � Quick Start
+## 🚀 Quick Start
 
-### Prerequisites
+### **Prerequisites**
 
-- **Node.js** 18+
-- **pnpm** (recommended) or npm
+- Node.js 18+
+- npm or pnpm
+- Git
 
-### 1. Clone the Repository
+### **1. Clone the Repository**
 
 ```bash
-git clone https://github.com/silicondeck/shadcn-dashboard-landing-template
-cd shadcn-dashboard
+git clone https://github.com/yourusername/flowpost.git
+cd flowpost/nextjs-version
 ```
 
-### 2. Choose Your Framework
-
-#### 🔥 **Vite Version** (Recommended for Development)
+### **2. Install Dependencies**
 
 ```bash
-cd vite-version
+npm install
+# or
 pnpm install
+```
+
+### **3. Set Up Environment Variables**
+
+Create a `.env.local` file:
+
+```bash
+# Clerk Authentication
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+CLERK_SECRET_KEY=your_clerk_secret_key
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/pricing
+
+# Stripe Payments
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+STRIPE_SECRET_KEY=your_stripe_secret_key
+STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+STRIPE_STARTER_PRICE_ID=your_starter_price_id
+STRIPE_PROFESSIONAL_PRICE_ID=your_professional_price_id
+STRIPE_AGENCY_PRICE_ID=your_agency_price_id
+
+# Supabase Database
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_key
+```
+
+### **4. Run Development Server**
+
+```bash
+npm run dev
+# or
 pnpm dev
 ```
 
-**Access at:** `http://localhost:5173`
-
-#### ⚡ **Next.js Version** (Production-Ready)
-
-```bash
-cd nextjs-version
-pnpm install
-pnpm dev
-```
-
-**Access at:** `http://localhost:3000`
-
-### 3. Start Building
-
-- **Dashboard:** Navigate to [/dashboard](https://shadcnstore.com/templates/dashboard/shadcn-dashboard-landing-template/dashboard) or [/dashboard-2](https://shadcnstore.com/templates/dashboard/shadcn-dashboard-landing-template/dashboard-2)
-- **Landing Page:** Visit [/landing](https://shadcnstore.com/templates/dashboard/shadcn-dashboard-landing-template/landing) for the business template
-- **Theme Customizer:** Use the built-in customizer to preview themes live
-- **Apps:** Explore [Mail](https://shadcnstore.com/templates/dashboard/shadcn-dashboard-landing-template/mail), [Tasks](https://shadcnstore.com/templates/dashboard/shadcn-dashboard-landing-template/tasks), [Chat](https://shadcnstore.com/templates/dashboard/shadcn-dashboard-landing-template/chat), [Calendar](https://shadcnstore.com/templates/dashboard/shadcn-dashboard-landing-template/calendar), [Users](https://shadcnstore.com/templates/dashboard/shadcn-dashboard-landing-template/users)
-- **Authentication:** Check out [Signin](https://shadcnstore.com/templates/dashboard/shadcn-dashboard-landing-template/auth/sign-in), [Signup](https://shadcnstore.com/templates/dashboard/shadcn-dashboard-landing-template/auth/sign-up), [Forgot Password](https://shadcnstore.com/templates/dashboard/shadcn-dashboard-landing-template/auth/forgot-password)
-- **Settings:** Visit [Account](https://shadcnstore.com/templates/dashboard/shadcn-dashboard-landing-template/settings/account), [Appearance](https://shadcnstore.com/templates/dashboard/shadcn-dashboard-landing-template/settings/appearance), [Billing](https://shadcnstore.com/templates/dashboard/shadcn-dashboard-landing-template/settings/billing)
+Visit **http://localhost:3000**
 
 ---
 
-## 🛠️ Development Commands
+## 📖 Documentation
 
-### Vite Version
+### **Project Structure**
 
-```bash
-pnpm dev          # Start development server
-pnpm build        # Build for production
-pnpm preview      # Preview production build
-pnpm lint         # Run ESLint
+```
+flowpost/
+├── nextjs-version/
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── (auth)/              # Authentication pages
+│   │   │   │   ├── sign-in/         # Sign in with Clerk
+│   │   │   │   ├── sign-up/         # Sign up with Clerk
+│   │   │   │   └── forgot-password/ # Password reset
+│   │   │   ├── (dashboard)/         # Protected dashboard routes
+│   │   │   │   ├── dashboard/       # Main analytics dashboard
+│   │   │   │   ├── pricing/         # Pricing page
+│   │   │   │   ├── calendar/        # Content calendar
+│   │   │   │   ├── posts/           # Post management
+│   │   │   │   ├── analytics/       # Advanced analytics
+│   │   │   │   ├── ai-generator/    # AI content generator
+│   │   │   │   ├── accounts/        # Connected accounts
+│   │   │   │   ├── team/            # Team management
+│   │   │   │   └── settings/        # User settings
+│   │   │   ├── landing/             # Public landing page
+│   │   │   ├── api/                 # API routes
+│   │   │   │   └── stripe/          # Stripe webhooks & checkout
+│   │   │   ├── layout.tsx           # Root layout with Clerk
+│   │   │   └── page.tsx             # Home (redirects to landing)
+│   │   ├── components/
+│   │   │   ├── ui/                  # shadcn/ui components
+│   │   │   ├── layouts/             # Layout components
+│   │   │   ├── effects/             # Visual effects
+│   │   │   ├── app-sidebar.tsx      # Dashboard sidebar
+│   │   │   ├── site-header.tsx      # Dashboard header with user profile
+│   │   │   └── checkout-button.tsx  # Stripe checkout button
+│   │   ├── lib/
+│   │   │   ├── stripe/              # Stripe client & server
+│   │   │   └── supabase/            # Supabase client & server
+│   │   └── hooks/                   # Custom React hooks
+│   ├── middleware.ts                # Clerk route protection
+│   ├── .env.local                   # Environment variables
+│   └── package.json
+├── docs/                            # Documentation
+├── FLOWPOST_BUSINESS_ROADMAP.md     # Complete business plan
+├── PHASE_3_SETUP_GUIDE.md           # Setup instructions
+└── README.md                        # This file
 ```
 
-### Next.js Version
+### **Key Files**
 
-```bash
-pnpm dev          # Start development server
-pnpm build        # Build for production
-pnpm start        # Start production server
-pnpm lint         # Run Next.js linter
-```
+- **`middleware.ts`** - Protects dashboard routes, allows public routes
+- **`app/layout.tsx`** - Root layout with ClerkProvider
+- **`app/(dashboard)/layout.tsx`** - Dashboard layout with sidebar
+- **`components/site-header.tsx`** - Header with user profile
+- **`lib/stripe/server.ts`** - Stripe configuration and plans
+- **`api/stripe/checkout/route.ts`** - Create checkout sessions
+- **`api/stripe/webhook/route.ts`** - Handle Stripe events
 
 ---
 
-## 🎨 Theme Customization
+## 🛠️ Tech Stack
 
-### **Live Theme Customizer**
-
-This template includes a powerful **live theme customizer** powered by **tweakcn**:
-
-![Customizer Preview](vite-version/public/customizer.png)
-
-1. **Open the customizer** - Click the theme customizer button
-2. **Choose colors** - Pick from preset themes or create custom palettes
-3. **Layout options** - Switch between sidebar variants and layouts
-4. **Real-time preview** - See changes instantly across all components
-5. **Export themes** - Save your custom themes for production use
-
-### **Built-in Themes**
-
-- 🌊 **Default** - Clean blue theme
-- 🌙 **Dark** - Professional dark theme
-- 🌸 **Rose** - Warm pink accents
-- 🌿 **Green** - Fresh green palette
-- 🌅 **Orange** - Vibrant orange theme
-- 🔴 **Red** - Bold red accents
-- 💜 **Violet** - Modern purple theme
-
-### **Custom Theme Creation**
-
-#### **Adding Custom Themes to the Customizer**
-To add your own custom themes to the live customizer, create theme objects in your theme configuration:
-
-```typescript
-// src/config/theme-data.ts (or similar file)
-export const customTheme = {
-  name: "Custom Brand",
-  cssVars: {
-    light: {
-      primary: "210 100% 50%",
-      "primary-foreground": "0 0% 98%",
-      secondary: "210 100% 95%",
-      "secondary-foreground": "210 100% 20%",
-      accent: "210 100% 90%",
-      "accent-foreground": "210 100% 15%",
-      // Add more color variables as needed
-    },
-    dark: {
-      primary: "210 100% 60%",
-      "primary-foreground": "210 100% 15%",
-      // Dark mode variants
-    }
-  }
-}
-```
-
-#### **Manual CSS Variable Customization**
-To directly modify theme colors, update your CSS variables in `globals.css` or `index.css`:
-
-```css
-:root {
-  --primary: oklch(0.5 0.2 240);
-  --primary-foreground: oklch(0.98 0.02 240);
-  --secondary: oklch(0.96 0.01 240);
-  --secondary-foreground: oklch(0.2 0.02 240);
-  /* Customize other variables */
-}
-
-.dark {
-  --primary: oklch(0.7 0.2 240);
-  --primary-foreground: oklch(0.15 0.02 240);
-  /* Dark mode variants */
-}
-```
-
-### **Removing the Theme Customizer**
-
-If you want to remove the theme customizer from your project:
-
-#### **Vite Version:**
-1. Remove the theme customizer component: `src/components/theme-customizer.tsx`
-2. Remove the theme customizer button from your layout
-3. Remove theme-related imports from your main layout file
-4. Delete the `src/components/theme-customizer/` folder if it exists
-
-#### **Next.js Version:**
-1. Remove the theme customizer component: `src/components/theme-customizer.tsx`
-2. Remove the theme customizer button from `src/app/layout.tsx`
-3. Remove theme-related imports from your layout files
-4. Delete the `src/components/theme-customizer/` folder if it exists
-
-> 📖 **Learn More:** For comprehensive theming documentation, visit the [official shadcn/ui theming guide](https://ui.shadcn.com/docs/theming) which covers CSS variables, color formats, and advanced customization techniques.
-
----
-
-## 📦 Tech Stack
-
-### **Core Framework**
-
+### **Frontend**
+- **Next.js 15** - React framework with App Router
 - **React 19** - Latest React with concurrent features
-- **TypeScript** - Full type safety
-- **Vite** - Ultra-fast development
-- **Next.js 15** - Production-ready with App Router
-
-### **UI & Styling**
-
-- **shadcn/ui v3** - Latest component library
-- **Radix UI** - Accessible primitives
+- **TypeScript** - Type safety throughout
 - **Tailwind CSS v4** - Utility-first styling
-- **tweakcn** - Advanced theme management
-- **Lucide React** - Beautiful icons
+- **shadcn/ui v3** - Beautiful component library
+- **Framer Motion** - Smooth animations
+- **Radix UI** - Accessible primitives
 
-### **State & Data**
-
-- **Zustand** - Lightweight state management
-- **React Hook Form** - Forms with validation
-- **Zod** - Schema validation
-- **TanStack Table** - Advanced data tables
+### **Backend & Services**
+- **Clerk** - Authentication and user management
+- **Stripe** - Payment processing and subscriptions
+- **Supabase** - PostgreSQL database and storage
+- **OpenAI** - AI content generation (coming soon)
+- **Vercel** - Hosting and deployment
 
 ### **Development**
-
 - **ESLint** - Code linting
 - **Prettier** - Code formatting
 - **TypeScript** - Static type checking
+- **Zod** - Schema validation
 
 ---
 
-## 📋 What's Included
+## 🔧 Configuration
 
-### **🖥️ Dashboard Pages**
+### **1. Clerk Setup (15 minutes)**
 
-- **Dashboard** - Overview with analytics cards and charts
-- **Dashboard v2** - Alternative dashboard with different metrics
+1. Go to [clerk.com](https://clerk.com)
+2. Create account and application "FlowPost"
+3. Copy API keys to `.env.local`
+4. Enable email/password authentication
+5. Optional: Enable OAuth (Google, GitHub)
 
-### **📱 Application Demos**
+### **2. Stripe Setup (20 minutes)**
 
-![Apps Preview](vite-version/public/apps.png)
+1. Go to [stripe.com](https://stripe.com)
+2. Create account (use test mode)
+3. Create 3 products:
+   - **Starter**: $19/month
+   - **Professional**: $49/month
+   - **Agency**: $99/month
+4. Copy price IDs to `.env.local`
+5. Set up webhook endpoint: `https://your-domain.com/api/stripe/webhook`
+6. Copy webhook secret to `.env.local`
 
-- **📧 Mail** - Complete email interface (Inbox, Read, Compose)
-- **✅ Tasks** - Task management with drag & drop
-- **💬 Chat** - Real-time chat interface
-- **📅 Calendar** - Event scheduling and management
-- **👥 Users** - User management and profiles with advanced tables
+### **3. Supabase Setup (15 minutes)**
 
-### **🔐 Authentication**
+1. Go to [supabase.com](https://supabase.com)
+2. Create project "flowpost"
+3. Copy API keys to `.env.local`
+4. Run SQL schema (see `PHASE_3_SETUP_GUIDE.md`)
+5. Create tables: users, subscriptions, posts, analytics
 
-- **Login** - 3 login page variants with different layouts
-- **Sign Up** - 3 registration page variants with different designs  
-- **Forgot Password** - 3 password recovery page variants
+### **4. Deploy to Vercel (30 minutes)**
 
-### **⚙️ Settings & Profile**
+1. Push code to GitHub
+2. Connect repository to Vercel
+3. Add all environment variables
+4. Deploy
+5. Update Clerk and Stripe URLs to production
 
-- **User Settings** - Manage your personal information and preferences
-- **Account Settings** - Profile management
-- **Plans & Billing** - Subscription and payment pages
-- **Appearance** - Theme and display preferences
-- **Notifications** - Notification preferences
-- **Connections** - Social media integrations
-
-### **❌ Error Pages**
-
-- **404** - Page not found
-- **401** - Unauthorized access
-- **403** - Forbidden
-- **500** - Internal server error
-- **Under Maintenance** - Maintenance mode page
-
-### **🌐 Landing Page Template**
-
-- **Hero Section** - Compelling headlines and CTAs
-- **About Section** - Company/product introduction with interactive elements
-- **Features Section** - Product/service highlights with icons
-- **Stats Section** - Key metrics and achievements display
-- **Logo Carousel** - Partner/client logos showcase
-- **Team Section** - Team member profiles and information
-- **Testimonials Section** - Customer reviews and social proof
-- **Blog Section** - Latest blog posts and articles
-- **Pricing Section** - Pricing tables and plans
-- **FAQ Section** - Frequently asked questions with expandable answers
-- **Contact Section** - Contact forms and information
-- **CTA Section** - Call-to-action components
-- **Navigation & Footer** - Complete navigation and footer components
-- **Theme Customizer** - Live theme switching for landing page
-
-### **📄 Additional Pages**
-
-- **FAQ** - Frequently asked questions
-- **Pricing** - Detailed pricing pages
+**Total Setup Time: ~90 minutes**
 
 ---
 
-## 🌟 Why Choose This Template?
+## 📊 Current Status
 
-### **🆓 Completely Free & Open Source**
+### **✅ Phase 1: Landing Page (Complete)**
+- Modern, responsive design
+- All sections implemented
+- Smooth animations
+- Dark/light mode
+- Mobile responsive
+- FlowPost branding
 
-- **MIT Licensed** - Use for personal and commercial projects
-- **No restrictions** - Modify, distribute, and sell
-- **Community driven** - Contributions welcome
+### **✅ Phase 2: Dashboard (Complete)**
+- Analytics overview
+- Engagement charts
+- Platform distribution
+- Recent posts
+- Top performing content
+- Audience insights
+- User profile in header
 
-### **🏢 Business Ready**
+### **✅ Phase 3: Auth & Payments (Complete)**
+- Clerk authentication
+- Stripe checkout
+- Supabase database
+- Route protection
+- User management
+- Subscription handling
 
-- **Production code** - Clean, maintainable, and scalable
-- **Professional design** - Modern UI that looks great
-- **Complete templates** - Dashboard + Landing page included
+### **⏳ Phase 4: AI Features (Next)**
+- OpenAI integration
+- Content generation
+- Caption writing
+- Hashtag suggestions
+- Image descriptions
 
-### **🎨 Advanced Theming**
-
-- **Live customization** - See changes in real-time
-- **tweakcn integration** - Professional theme management
-- **Multiple layouts** - Sidebar variants and options
-
-### **⚡ Developer Friendly**
-
-- **Modern stack** - Latest React, TypeScript, Tailwind CSS
-- **Great DX** - Fast development with Vite
-- **Type safe** - Full TypeScript coverage
-- **Well documented** - Clear code and comments
+### **⏳ Phase 5: Social Media APIs (Future)**
+- Instagram integration
+- Facebook integration
+- Twitter integration
+- LinkedIn integration
+- Post scheduling
+- Auto-posting
 
 ---
 
-## 🚀 Take It Further with ShadcnStore
+## 🎯 Roadmap
 
-This free template is just the beginning! **ShadcnStore** offers a complete ecosystem of free & premium UI components, dashboards and templates to accelerate your development:
+### **Week 1-2: MVP Launch**
+- ✅ Landing page
+- ✅ Dashboard
+- ✅ Authentication
+- ✅ Payments
+- ⏳ AI content generator
+- ⏳ Deploy to production
 
-### **🎁 Available Now**
+### **Week 3-4: Social Media Integration**
+- ⏳ Instagram API
+- ⏳ Facebook API
+- ⏳ Twitter API
+- ⏳ LinkedIn API
+- ⏳ Post scheduling
 
-- **[Premium Blocks](https://shadcnstore.com/blocks)** - 150+ production-ready UI blocks
-  - **Application Blocks** - Advanced dashboard components
-  - **Marketing Blocks** - Landing page sections
-  - **E-commerce Blocks** - Online store components
-  - **Free Blocks** - No-cost starter components
+### **Month 2: Growth Features**
+- ⏳ Team collaboration
+- ⏳ Advanced analytics
+- ⏳ Content calendar
+- ⏳ Media library
+- ⏳ Reporting
 
-### **🔜 Coming Soon**
+### **Month 3-6: Scale & Optimize**
+- ⏳ Mobile app
+- ⏳ Browser extension
+- ⏳ API for developers
+- ⏳ White-label solution
+- ⏳ Enterprise features
 
-- **Premium Templates** - Complete application templates
-- **Landing Page Collection** - Business-ready landing pages
-- **Premium Dashboards** - Advanced dashboard solutions
+---
 
-### **💡 Perfect For**
+## 💡 Business Strategy
 
-- **SaaS Applications** - Complete dashboard solutions
-- **Marketing Sites** - Beautiful landing pages
-- **E-commerce** - Online store interfaces
-- **Internal Tools** - Admin panels and dashboards
+### **Target Market**
+1. **Small Businesses** (50-100 employees)
+   - Need: Affordable social media management
+   - Pain: No dedicated marketing team
+   - Budget: $19-49/month
 
-> **🎯 [Explore ShadcnStore](https://shadcnstore.com)** - Premium blocks, dashboards and templates for modern web applications.
+2. **Content Creators** (Influencers, Bloggers)
+   - Need: Consistent posting, analytics
+   - Pain: Time-consuming content creation
+   - Budget: $19-49/month
+
+3. **Agencies** (Marketing, Social Media)
+   - Need: Multi-client management
+   - Pain: Expensive tools, no white-label
+   - Budget: $99+/month
+
+### **Go-to-Market Strategy**
+
+**Month 1: Launch**
+- Product Hunt launch
+- Social media announcement
+- Content marketing (blog posts)
+- SEO optimization
+- Email marketing
+
+**Month 2-3: Growth**
+- Paid ads (Google, Facebook)
+- Influencer partnerships
+- Affiliate program
+- Case studies
+- Testimonials
+
+**Month 4-6: Scale**
+- Partnerships with agencies
+- Referral program
+- YouTube tutorials
+- Webinars
+- Community building
+
+### **Success Metrics**
+
+**Key Performance Indicators (KPIs)**:
+- Sign-up conversion rate: 10%+
+- Free trial to paid: 20%+
+- Monthly churn rate: <5%
+- Customer lifetime value (LTV): $500+
+- Customer acquisition cost (CAC): <$50
+- LTV:CAC ratio: 10:1
+
+**Growth Targets**:
+- Month 1: 50 sign-ups, 20 paying ($500 MRR)
+- Month 3: 300 sign-ups, 100 paying ($3,000 MRR)
+- Month 6: 1,000 sign-ups, 300 paying ($10,000 MRR)
+- Year 1: 3,000 sign-ups, 800 paying ($25,000 MRR)
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions! Here's how you can help:
+We welcome contributions from the community! Here's how you can help:
 
 ### **Ways to Contribute**
+- 🐛 Report bugs and issues
+- 💡 Suggest new features
+- � Submit pull requests
+- 📖 Improve documentation
+- ⭐ Star the repository
 
-- 🐛 **Report bugs** - Found an issue? Let us know!
-- 💡 **Suggest features** - Have ideas for improvements?
-- 🔧 **Submit PRs** - Fix bugs or add new features
-- 📖 **Improve docs** - Help make documentation better
-- ⭐ **Star the repo** - Show your support!
-
-### **Getting Started**
-
+### **Development Workflow**
 1. Fork the repository
-2. Create a feature branch: `git checkout -b my-feature`
-3. Make your changes and test thoroughly
-4. Commit: `git commit -m "Add new feature"`
-5. Push: `git push origin my-feature`
-6. Open a Pull Request
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Make your changes
+4. Test thoroughly
+5. Commit: `git commit -m "Add amazing feature"`
+6. Push: `git push origin feature/amazing-feature`
+7. Open a Pull Request
 
-### **Code Style**
-
-- Use **TypeScript** for all new code
-- Follow **ESLint** and **Prettier** configurations
-- Add **type definitions** for props and data
-- Write **clear commit messages**
-- Test your changes in both **Vite** and **Next.js** versions
+### **Code Standards**
+- Use TypeScript for all new code
+- Follow ESLint and Prettier configurations
+- Write clear commit messages
+- Add tests for new features
+- Update documentation
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License** - see the [LICENSE](License.md) file for details.
 
 **You are free to:**
-
 - ✅ Use commercially
 - ✅ Modify and distribute
 - ✅ Include in private projects
-- ✅ Sell products built with this template
+- ✅ Sell products built with this
 
-**Attribution to [ShadcnStore](https://shadcnstore.com) is appreciated but not required.**
-
----
-
-## 🙏 Credits & Acknowledgments
-
-This template is built on the shoulders of amazing open-source projects:
-
-- **[shadcn/ui](https://ui.shadcn.com)** - Beautiful and accessible components
-- **[Radix UI](https://www.radix-ui.com)** - Low-level accessible primitives
-- **[Tailwind CSS](https://tailwindcss.com)** - Utility-first CSS framework
-- **[Lucide Icons](https://lucide.dev)** - Beautiful & consistent icons
-- **[tweakcn](https://tweakcn.com)** - Advanced theme customization
-- **[Recharts](https://recharts.org)** - Composable charting library
-- **[TanStack Table](https://tanstack.com/table)** - Powerful data tables
+**Attribution appreciated but not required.**
 
 ---
 
-## 📞 Support & Community
+## 🙏 Acknowledgments
+
+Built with amazing open-source projects:
+
+- **[shadcn/ui](https://ui.shadcn.com)** - Component library
+- **[Clerk](https://clerk.com)** - Authentication
+- **[Stripe](https://stripe.com)** - Payments
+- **[Supabase](https://supabase.com)** - Database
+- **[Tailwind CSS](https://tailwindcss.com)** - Styling
+- **[Framer Motion](https://www.framer.com/motion/)** - Animations
+- **[Radix UI](https://www.radix-ui.com)** - Primitives
+- **[Lucide Icons](https://lucide.dev)** - Icons
+
+Special thanks to the original template by [ShadcnStore](https://shadcnstore.com).
+
+---
+
+## � Support & Contact
 
 ### **Get Help**
+- � **Documentation** - See `docs/` folder
+- � **Issues** - [GitHub Issues](https://agithub.com/yourusername/flowpost/issues)
+- 💬 **Discussions** - [GitHub Discussions](https://github.com/yourusername/flowpost/discussions)
 
-- 📖 **Documentation** - This README covers everything
-- 🐛 **Issues** - [Report bugs](https://github.com/silicondeck/shadcn-dashboard-landing-template/issues)
-- 💬 **Discussions** - [Join conversations](https://github.com/silicondeck/shadcn-dashboard-landing-template/discussions)
+### **Connect**
+- 🌐 **Website** - [flowpost.app](#)
+- 🐦 **Twitter** - [@flowpost](#)
+- 📧 **Email** - [hello@flowpost.app](mailto:hello@flowpost.app)
 
-### **Stay Connected**
+---
 
-- 🌐 **Website** - [ShadcnStore.com](https://shadcnstore.com)
-- 🐦 **Twitter** - [@shadcnstore](https://twitter.com/shadcnstore)
-- 💬 **Discord** - [Join our server](https://discord.com/invite/XEQhPc9a6p)
-- 📧 **Email** - [hello@shadcnstore.com](mailto:hello@shadcnstore.com)
+## 📈 Stats
+
+![GitHub Stars](https://img.shields.io/github/stars/yourusername/flowpost?style=social)
+![GitHub Forks](https://img.shields.io/github/forks/yourusername/flowpost?style=social)
+![GitHub Issues](https://img.shields.io/github/issues/yourusername/flowpost)
+![GitHub Pull Requests](https://img.shields.io/github/issues-pr/yourusername/flowpost)
 
 ---
 
 <div align="center">
 
-**⭐ Star this repo if it helped you!**
+**⭐ Star this repo if you're building with FlowPost!**
 
-[![ShadcnStore](https://img.shields.io/badge/Built%20by-ShadcnStore-blue?style=for-the-badge)](https://shadcnstore.com)
+**Built by a real founder, for real founders.**
 
-_A free & open-source template by **[ShadcnStore](https://shadcnstore.com)** - Premium UI components, dashboards and templates for modern web development._
+_From idea to $10K MRR in 6 months. Let's build together! 🚀_
+
+---
+
+**[Get Started](#quick-start)** | **[View Demo](#)** | **[Read Docs](#documentation)**
+
+</div>
+
+---
+
+## 🎓 Learning Resources
+
+### **For Founders**
+- [FLOWPOST_BUSINESS_ROADMAP.md](FLOWPOST_BUSINESS_ROADMAP.md) - Complete business plan
+- [FOUNDER_ACTION_PLAN.md](FOUNDER_ACTION_PLAN.md) - Step-by-step execution plan
+- [PHASE_3_SETUP_GUIDE.md](PHASE_3_SETUP_GUIDE.md) - Technical setup guide
+
+### **For Developers**
+- [ROUTING_AUTHENTICATION_AUDIT.md](ROUTING_AUTHENTICATION_AUDIT.md) - Auth implementation
+- [CLERK_INTEGRATION_COMPLETE.md](CLERK_INTEGRATION_COMPLETE.md) - Clerk setup
+- [COMPLETE_AUDIT_PHASE_1_2_3.md](COMPLETE_AUDIT_PHASE_1_2_3.md) - Full audit
+
+### **For Designers**
+- Landing page components in `src/app/landing/components/`
+- Dashboard components in `src/app/(dashboard)/dashboard/components/`
+- UI components in `src/components/ui/`
+
+---
+
+## 🔥 Why FlowPost?
+
+### **For Customers**
+- 💰 **Affordable** - Starting at $19/month
+- 🤖 **AI-Powered** - Generate content in seconds
+- 📊 **Insightful** - Real-time analytics
+- 🎨 **Beautiful** - Modern, intuitive interface
+- 🚀 **Fast** - Built with latest tech
+
+### **For Founders**
+- 💵 **Revenue-Ready** - Accept payments day 1
+- 🏗️ **Production-Ready** - Clean, scalable code
+- 📈 **Proven Model** - SaaS with recurring revenue
+- 🎯 **Clear Roadmap** - From MVP to $10K MRR
+- 🤝 **Community** - Learn and grow together
+
+### **For Developers**
+- ⚡ **Modern Stack** - Next.js 15, React 19, TypeScript
+- 🎨 **Beautiful UI** - shadcn/ui, Tailwind CSS
+- 🔐 **Secure** - Clerk, Stripe, Supabase
+- 📚 **Well Documented** - Clear code and guides
+- 🧪 **Type Safe** - Full TypeScript coverage
+
+---
+
+<div align="center">
+
+**Ready to build your SaaS empire?**
+
+**[Start Building Now →](#quick-start)**
+
+_FlowPost: From zero to revenue in record time._ 🚀
 
 </div>

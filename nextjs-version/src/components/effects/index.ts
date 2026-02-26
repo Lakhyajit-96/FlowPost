@@ -1,0 +1,6 @@
+export { ParticlesBackground } from "./particles-background"
+export { AnimatedGrid } from "./animated-grid"
+export { GradientOrbs } from "./gradient-orbs"
+export { SpotlightEffect } from "./spotlight-effect"
+export { FloatingElements } from "./floating-elements"
+export { AnimatedBeams } from "./animated-beams"

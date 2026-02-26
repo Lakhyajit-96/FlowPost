@@ -1,32 +1,37 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 
-// This function can be marked `async` if using `await` inside
-export function middleware(request: NextRequest) {
-  // Add custom middleware logic here
-  // For example: authentication, redirects, etc.
-  
-  // Example: Redirect /login to /auth/sign-in
-  if (request.nextUrl.pathname === '/login') {
-    return NextResponse.redirect(new URL('/auth/sign-in', request.url))
-  }
-  
-  // Example: Redirect /register to /auth/sign-up
-  if (request.nextUrl.pathname === '/register') {
-    return NextResponse.redirect(new URL('/auth/sign-up', request.url))
-  }
-  
-  return NextResponse.next()
-}
+// Define public routes that don't require authentication
+const isPublicRoute = createRouteMatcher([
+  '/',
+  '/landing',
+  '/pricing',
+  '/sign-in(.*)',
+  '/sign-up(.*)',
+  '/forgot-password(.*)',
+  '/api/stripe/webhook',
+  '/api/webhooks(.*)',
+])
 
-// See "Matching Paths" below to learn more
+export default clerkMiddleware(async (auth, req) => {
+  // Skip middleware for static files
+  const { pathname } = req.nextUrl
+  if (
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/static') ||
+    pathname.match(/\.(png|jpg|jpeg|gif|svg|ico|webp|css|js|woff|woff2|ttf)$/)
+  ) {
+    return
+  }
+
+  // Protect all routes except public ones
+  if (!isPublicRoute(req)) {
+    await auth.protect()
+  }
+})
+
 export const config = {
   matcher: [
-    // Match all request paths except for the ones starting with:
-    // - api (API routes)
-    // - _next/static (static files)
-    // - _next/image (image optimization files)
-    // - favicon.ico (favicon file)
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    '/((?!_next|[^?]*\\.(?:png|jpg|jpeg|gif|svg|ico|webp|css|js|woff|woff2|ttf)).*)',
+    '/(api|trpc)(.*)',
   ],
 }

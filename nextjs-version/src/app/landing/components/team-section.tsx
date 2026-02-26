@@ -6,6 +6,8 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { CardDecorator } from '@/components/ui/card-decorator'
 import { Github, Linkedin, Globe } from 'lucide-react'
+import { GradientOrbs } from '@/components/effects'
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 
 
 const team = [
@@ -117,10 +119,19 @@ const team = [
 
 export function TeamSection() {
   return (
-    <section id="team" className="py-24 sm:py-32">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="team" className="relative py-24 sm:py-32 overflow-hidden">
+      {/* Background Effects */}
+      <GradientOrbs count={2} />
+      
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="mx-auto max-w-4xl text-center mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mx-auto max-w-4xl text-center mb-16"
+        >
           <Badge variant="outline" className="mb-4">
             Our Team
           </Badge>
@@ -130,95 +141,205 @@ export function TeamSection() {
           <p className="text-lg text-muted-foreground mb-8">
             We are a passionate team of innovators, builders, and problem-solvers dedicated to creating exceptional digital experiences that make a difference.
           </p>
-        </div>
+        </motion.div>
 
         {/* Team Grid */}
         <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 xl:grid-cols-4">
-          {team.map((member) => (
-            <Card key={member.id} className="shadow-xs py-2">
-              <CardContent className="p-4">
-                <div className="text-center">
-                  {/* Avatar */}
-                  <div className="flex justify-center mb-4">
-                    <CardDecorator>
-                      <Avatar className="h-24 w-24 border shadow-lg">
-                        <AvatarImage
-                          src={member.image}
-                          alt={member.name}
-                          className="object-cover"
-                        />
-                        <AvatarFallback className="text-lg font-semibold">
-                          {member.fallback}
-                        </AvatarFallback>
-                      </Avatar>
-                    </CardDecorator>
-                  </div>
+          {team.map((member, index) => {
+            const mouseX = useMotionValue(0)
+            const mouseY = useMotionValue(0)
+            const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [12, -12]), { stiffness: 300, damping: 30 })
+            const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-12, 12]), { stiffness: 300, damping: 30 })
 
-                  {/* Name and Role */}
-                  <h3 className="text-lg font-semibold text-foreground mb-1">
-                    {member.name}
-                  </h3>
-                  <p className="text-sm font-medium text-primary mb-3">
-                    {member.role}
-                  </p>
+            return (
+              <motion.div
+                key={member.id}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: (index % 4) * 0.1, ease: "easeOut" }}
+                whileHover={{ y: -8, transition: { duration: 0.3 } }}
+                style={{
+                  rotateX,
+                  rotateY,
+                  transformStyle: "preserve-3d",
+                  perspective: 1000,
+                }}
+                onMouseMove={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect()
+                  const centerX = rect.left + rect.width / 2
+                  const centerY = rect.top + rect.height / 2
+                  mouseX.set((e.clientX - centerX) / rect.width)
+                  mouseY.set((e.clientY - centerY) / rect.height)
+                }}
+                onMouseLeave={() => {
+                  mouseX.set(0)
+                  mouseY.set(0)
+                }}
+              >
+                <Card className="shadow-xs py-2 h-full">
+                  <CardContent className="p-4">
+                    <div className="text-center">
+                      {/* Avatar */}
+                      <div className="flex justify-center mb-4">
+                        <motion.div
+                          initial={{ scale: 0, rotate: -180 }}
+                          whileInView={{ scale: 1, rotate: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ 
+                            duration: 0.6, 
+                            delay: (index % 4) * 0.1 + 0.2, 
+                            type: "spring", 
+                            stiffness: 200 
+                          }}
+                          style={{ translateZ: 50 }}
+                        >
+                          <CardDecorator>
+                            <Avatar className="h-24 w-24 border shadow-lg">
+                              <AvatarImage
+                                src={member.image}
+                                alt={member.name}
+                                className="object-cover"
+                              />
+                              <AvatarFallback className="text-lg font-semibold">
+                                {member.fallback}
+                              </AvatarFallback>
+                            </Avatar>
+                          </CardDecorator>
+                        </motion.div>
+                      </div>
 
-                  {/* Description */}
-                  <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-                    {member.description}
-                  </p>
+                      {/* Name and Role */}
+                      <motion.h3
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, delay: (index % 4) * 0.1 + 0.3 }}
+                        style={{ translateZ: 30 }}
+                        className="text-lg font-semibold text-foreground mb-1"
+                      >
+                        {member.name}
+                      </motion.h3>
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, delay: (index % 4) * 0.1 + 0.4 }}
+                        style={{ translateZ: 25 }}
+                        className="text-sm font-medium text-primary mb-3"
+                      >
+                        {member.role}
+                      </motion.p>
 
-                  {/* Social Links */}
-                  <div className="flex items-center justify-center gap-3">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 cursor-pointer hover:text-primary"
-                      asChild
-                    >
-                      <a
-                        href={member.social.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`${member.name} LinkedIn`}
+                      {/* Description */}
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, delay: (index % 4) * 0.1 + 0.5 }}
+                        style={{ translateZ: 20 }}
+                        className="text-sm text-muted-foreground mb-4 leading-relaxed"
                       >
-                        <Linkedin className="h-4 w-4" />
-                      </a>
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 cursor-pointer hover:text-primary"
-                      asChild
-                    >
-                      <a
-                        href={member.social.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`${member.name} GitHub`}
+                        {member.description}
+                      </motion.p>
+
+                      {/* Social Links */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, delay: (index % 4) * 0.1 + 0.6 }}
+                        style={{ translateZ: 35 }}
+                        className="flex items-center justify-center gap-3"
                       >
-                        <Github className="h-4 w-4" />
-                      </a>
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 cursor-pointer hover:text-primary"
-                      asChild
-                    >
-                      <a
-                        href={member.social.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`${member.name} Website`}
-                      >
-                        <Globe className="h-4 w-4" />
-                      </a>
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                        <motion.div
+                          whileHover={{ scale: 1.3, rotate: 10, y: -3 }}
+                          whileTap={{ scale: 0.85 }}
+                          style={{ transformStyle: "preserve-3d" }}
+                        >
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 cursor-pointer hover:text-primary relative group"
+                            asChild
+                          >
+                            <a
+                              href={member.social.linkedin}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={`${member.name} LinkedIn`}
+                            >
+                              <motion.div
+                                className="absolute inset-0 bg-primary/10 rounded-md"
+                                initial={{ scale: 0, opacity: 0 }}
+                                whileHover={{ scale: 1, opacity: 1 }}
+                                transition={{ duration: 0.2 }}
+                              />
+                              <Linkedin className="h-4 w-4 relative z-10" />
+                            </a>
+                          </Button>
+                        </motion.div>
+                        <motion.div
+                          whileHover={{ scale: 1.3, rotate: 10, y: -3 }}
+                          whileTap={{ scale: 0.85 }}
+                          style={{ transformStyle: "preserve-3d" }}
+                        >
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 cursor-pointer hover:text-primary relative group"
+                            asChild
+                          >
+                            <a
+                              href={member.social.github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={`${member.name} GitHub`}
+                            >
+                              <motion.div
+                                className="absolute inset-0 bg-primary/10 rounded-md"
+                                initial={{ scale: 0, opacity: 0 }}
+                                whileHover={{ scale: 1, opacity: 1 }}
+                                transition={{ duration: 0.2 }}
+                              />
+                              <Github className="h-4 w-4 relative z-10" />
+                            </a>
+                          </Button>
+                        </motion.div>
+                        <motion.div
+                          whileHover={{ scale: 1.3, rotate: 10, y: -3 }}
+                          whileTap={{ scale: 0.85 }}
+                          style={{ transformStyle: "preserve-3d" }}
+                        >
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 cursor-pointer hover:text-primary relative group"
+                            asChild
+                          >
+                            <a
+                              href={member.social.website}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={`${member.name} Website`}
+                            >
+                              <motion.div
+                                className="absolute inset-0 bg-primary/10 rounded-md"
+                                initial={{ scale: 0, opacity: 0 }}
+                                whileHover={{ scale: 1, opacity: 1 }}
+                                transition={{ duration: 0.2 }}
+                              />
+                              <Globe className="h-4 w-4 relative z-10" />
+                            </a>
+                          </Button>
+                        </motion.div>
+                      </motion.div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )
+          })}
         </div>
       </div>
     </section>

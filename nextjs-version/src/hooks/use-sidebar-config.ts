@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react"
 import { SidebarContext, type SidebarContextValue } from "@/contexts/sidebar-context"
 

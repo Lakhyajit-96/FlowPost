@@ -43,72 +43,83 @@
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 0.5rem;
+  /* Layout Custom Properties */
+  --sidebar-width: 280px;
+  --content-max-width: 100%;
+  /* FlowPost Brand Colors - Deep Vibrant Purple Theme */
   --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --foreground: oklch(0.145 0.01 300);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.145 0.01 300);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.145 0.01 300);
+  /* Primary: Deeper Vibrant Purple (#7c3aed to #9333ea) */
+  --primary: oklch(0.55 0.30 305);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.96 0.02 305);
+  --secondary-foreground: oklch(0.28 0.18 305);
+  --muted: oklch(0.96 0.01 305);
+  --muted-foreground: oklch(0.50 0.03 305);
+  /* Accent: Deeper purple highlights */
+  --accent: oklch(0.94 0.05 310);
+  --accent-foreground: oklch(0.32 0.18 305);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --border: oklch(0.90 0.01 305);
+  --input: oklch(0.90 0.01 305);
+  --ring: oklch(0.55 0.30 305);
+  /* Charts: Deeper purple palette */
+  --chart-1: oklch(0.58 0.28 305);
+  --chart-2: oklch(0.63 0.26 310);
+  --chart-3: oklch(0.53 0.26 300);
+  --chart-4: oklch(0.68 0.24 315);
+  --chart-5: oklch(0.73 0.20 295);
+  --sidebar: oklch(0.98 0.01 305);
+  --sidebar-foreground: oklch(0.20 0.03 305);
+  --sidebar-primary: oklch(0.55 0.30 305);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.94 0.05 310);
+  --sidebar-accent-foreground: oklch(0.32 0.18 305);
+  --sidebar-border: oklch(0.90 0.01 305);
+  --sidebar-ring: oklch(0.55 0.30 305);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  /* FlowPost Dark Mode - Deeper Vibrant Purple Theme */
+  --background: oklch(0.12 0.03 305);
+  --foreground: oklch(0.98 0.01 305);
+  --card: oklch(0.18 0.04 305);
+  --card-foreground: oklch(0.98 0.01 305);
+  --popover: oklch(0.18 0.04 305);
+  --popover-foreground: oklch(0.98 0.01 305);
+  /* Primary: Bright deeper purple for dark mode */
+  --primary: oklch(0.70 0.32 305);
+  --primary-foreground: oklch(0.12 0.03 305);
+  --secondary: oklch(0.22 0.05 305);
+  --secondary-foreground: oklch(0.98 0.01 305);
+  --muted: oklch(0.22 0.05 305);
+  --muted-foreground: oklch(0.65 0.03 305);
+  /* Accent: Deeper purple highlights for dark mode */
+  --accent: oklch(0.25 0.09 310);
+  --accent-foreground: oklch(0.78 0.20 305);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --border: oklch(0.98 0.01 305 / 12%);
+  --input: oklch(0.98 0.01 305 / 18%);
+  --ring: oklch(0.70 0.32 305);
+  /* Charts: Vibrant deeper purple for dark mode */
+  --chart-1: oklch(0.68 0.30 305);
+  --chart-2: oklch(0.73 0.28 310);
+  --chart-3: oklch(0.63 0.28 300);
+  --chart-4: oklch(0.78 0.26 315);
+  --chart-5: oklch(0.83 0.22 295);
+  --sidebar: oklch(0.16 0.04 305);
+  --sidebar-foreground: oklch(0.98 0.01 305);
+  --sidebar-primary: oklch(0.70 0.32 305);
+  --sidebar-primary-foreground: oklch(0.12 0.03 305);
+  --sidebar-accent: oklch(0.25 0.09 310);
+  --sidebar-accent-foreground: oklch(0.78 0.20 305);
+  --sidebar-border: oklch(0.98 0.01 305 / 12%);
+  --sidebar-ring: oklch(0.70 0.32 305);
 }
 
 @layer base {
@@ -120,6 +131,72 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+}
+
+/* Hide scrollbars globally while keeping scroll functionality - Premium look */
+/* Firefox */
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Chrome, Safari, Opera, Edge */
+*::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+  background: transparent;
+}
+
+*::-webkit-scrollbar-track {
+  display: none;
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  display: none;
+  background: transparent;
+}
+
+/* Ensure scroll still works */
+html,
+body {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Hide scrollbars in modals and dialogs */
+[role="dialog"],
+[role="dialog"] *,
+.overflow-y-auto,
+.overflow-auto,
+.overflow-scroll {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+[role="dialog"]::-webkit-scrollbar,
+[role="dialog"] *::-webkit-scrollbar,
+.overflow-y-auto::-webkit-scrollbar,
+.overflow-auto::-webkit-scrollbar,
+.overflow-scroll::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Specific for dialog content */
+[data-radix-scroll-area-viewport],
+[data-radix-scroll-area-viewport] * {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+[data-radix-scroll-area-viewport]::-webkit-scrollbar,
+[data-radix-scroll-area-viewport] *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 /* Ensure consistent font rendering across different DPI levels */
@@ -169,4 +246,348 @@ html {
 
 .animate-logo-scroll:hover {
   animation-play-state: paused;
+}
+
+/* ============================================
+   PREMIUM COMPACT DESIGN SYSTEM
+   ============================================ */
+
+/* Compact Typography */
+body {
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: 1.75rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 1.5rem;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+}
+
+h3 {
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+
+/* Compact Buttons */
+button,
+[role="button"],
+.btn {
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  height: 2.25rem;
+  border-radius: 0.5rem;
+}
+
+button.btn-sm,
+[role="button"].btn-sm {
+  font-size: 0.8125rem;
+  padding: 0.375rem 0.75rem;
+  height: 2rem;
+}
+
+/* Compact Cards */
+[data-slot="card"],
+.card {
+  border-radius: 0.5rem;
+}
+
+[data-slot="card-header"],
+.card-header {
+  padding: 1rem;
+}
+
+[data-slot="card-content"],
+.card-content {
+  padding: 1rem;
+}
+
+[data-slot="card-footer"],
+.card-footer {
+  padding: 1rem;
+}
+
+/* Compact Inputs */
+input,
+textarea,
+select {
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"] {
+  height: 2.25rem;
+}
+
+/* Compact Badges */
+.badge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+}
+
+/* Compact Tables */
+table {
+  font-size: 0.875rem;
+}
+
+th {
+  font-size: 0.8125rem;
+  padding: 0.625rem 0.75rem;
+  font-weight: 600;
+}
+
+td {
+  padding: 0.625rem 0.75rem;
+}
+
+/* Compact Spacing */
+.space-y-1 > * + * {
+  margin-top: 0.25rem;
+}
+
+.space-y-2 > * + * {
+  margin-top: 0.5rem;
+}
+
+.space-y-3 > * + * {
+  margin-top: 0.75rem;
+}
+
+.space-y-4 > * + * {
+  margin-top: 1rem;
+}
+
+.space-y-6 > * + * {
+  margin-top: 1.5rem;
+}
+
+/* Compact Sidebar */
+[data-sidebar="sidebar"] {
+  font-size: 0.875rem;
+}
+
+[data-sidebar="sidebar"] [data-slot="sidebar-menu-button"] {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  height: 2.25rem;
+}
+
+/* Compact Dialogs */
+[role="dialog"] {
+  border-radius: 0.75rem;
+}
+
+[role="dialog"] [data-slot="dialog-header"] {
+  padding: 1.25rem 1.5rem 0.75rem;
+}
+
+[role="dialog"] [data-slot="dialog-content"] {
+  padding: 0 1.5rem;
+}
+
+[role="dialog"] [data-slot="dialog-footer"] {
+  padding: 0.75rem 1.5rem 1.25rem;
+}
+
+/* Compact Dropdowns */
+[role="menu"],
+[role="listbox"] {
+  font-size: 0.875rem;
+  padding: 0.375rem;
+  border-radius: 0.5rem;
+}
+
+[role="menuitem"],
+[role="option"] {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  border-radius: 0.375rem;
+}
+
+/* Compact Icons */
+svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.icon-sm svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.icon-lg svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Compact Avatars */
+[data-slot="avatar"] {
+  width: 2rem;
+  height: 2rem;
+  font-size: 0.75rem;
+}
+
+[data-slot="avatar"].avatar-sm {
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 0.625rem;
+}
+
+[data-slot="avatar"].avatar-lg {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 0.875rem;
+}
+
+/* Compact Form Labels */
+label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.375rem;
+}
+
+/* Compact Tooltips */
+[role="tooltip"] {
+  font-size: 0.8125rem;
+  padding: 0.375rem 0.625rem;
+  border-radius: 0.375rem;
+}
+
+/* Compact Alerts */
+[role="alert"],
+.alert {
+  font-size: 0.875rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+}
+
+/* Premium Shadows */
+.shadow-sm {
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.shadow {
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+.shadow-md {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.shadow-lg {
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* Smooth Transitions */
+* {
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button,
+[role="button"],
+a {
+  transition-property: all;
+}
+
+/* Premium Focus States */
+*:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 0.375rem;
+}
+
+/* Compact Pagination */
+[data-slot="pagination"] {
+  font-size: 0.875rem;
+}
+
+[data-slot="pagination"] button {
+  height: 2rem;
+  width: 2rem;
+  padding: 0;
+}
+
+/* Compact Breadcrumbs */
+[data-slot="breadcrumb"] {
+  font-size: 0.875rem;
+}
+
+/* Compact Progress Bars */
+[role="progressbar"] {
+  height: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+/* Compact Switches */
+[role="switch"] {
+  width: 2.5rem;
+  height: 1.25rem;
+}
+
+[role="switch"] > span {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Compact Checkboxes & Radios */
+input[type="checkbox"],
+input[type="radio"] {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Compact Tabs */
+[role="tablist"] {
+  font-size: 0.875rem;
+}
+
+[role="tab"] {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+/* Compact Accordions */
+[data-slot="accordion-trigger"] {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+}
+
+[data-slot="accordion-content"] {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+}
+
+/* Responsive Compact Adjustments */
+@media (max-width: 768px) {
+  body {
+    font-size: 13px;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  h2 {
+    font-size: 1.25rem;
+  }
+  
+  button,
+  [role="button"] {
+    font-size: 0.8125rem;
+    height: 2rem;
+  }
 }

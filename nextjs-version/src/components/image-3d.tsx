@@ -1,6 +1,5 @@
 "use client"
 
-import Image from 'next/image'
 import { cn } from "@/lib/utils"
 
 interface Image3DProps {
@@ -53,11 +52,9 @@ export function Image3D({
             )} />
 
             {/* Theme-aware images */}
-            <Image
+            <img
               src={lightSrc}
               alt={`${alt} - Light Mode`}
-              width={800}
-              height={600}
               className={cn(
                 "block size-full object-cover dark:hidden transition-transform duration-700 group-hover:scale-105",
                 isRight ? "object-center" : "object-left"
@@ -65,11 +62,9 @@ export function Image3D({
               loading="lazy"
             />
 
-            <Image
+            <img
               src={darkSrc}
               alt={`${alt} - Dark Mode`}
-              width={800}
-              height={600}
               className={cn(
                 "hidden dark:block size-full object-cover transition-transform duration-700 group-hover:scale-105",
                 isRight ? "object-center" : "object-left"

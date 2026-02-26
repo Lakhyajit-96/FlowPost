@@ -3,18 +3,18 @@ import { LandingPageContent } from './landing-page-content'
 
 // Metadata for the landing page
 export const metadata: Metadata = {
-  title: 'ShadcnStore - Modern Admin Dashboard Template',
-  description: 'A beautiful and comprehensive admin dashboard template built with React, Next.js, TypeScript, and shadcn/ui. Perfect for building modern web applications.',
-  keywords: ['admin dashboard', 'react', 'nextjs', 'typescript', 'shadcn/ui', 'tailwind css'],
+  title: 'FlowPost - AI-Powered Social Media Management Made Simple',
+  description: 'Create, schedule, and manage your social media content effortlessly with AI. Perfect for small businesses, solopreneurs, and content creators. Start free today.',
+  keywords: ['social media management', 'AI content generator', 'social media scheduler', 'Instagram scheduler', 'Facebook scheduler', 'content calendar', 'social media automation'],
   openGraph: {
-    title: 'ShadcnStore - Modern Admin Dashboard Template',
-    description: 'A beautiful and comprehensive admin dashboard template built with React, Next.js, TypeScript, and shadcn/ui.',
+    title: 'FlowPost - AI-Powered Social Media Management Made Simple',
+    description: 'Create, schedule, and manage your social media content effortlessly with AI. Perfect for small businesses and solopreneurs.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ShadcnStore - Modern Admin Dashboard Template',
-    description: 'A beautiful and comprehensive admin dashboard template built with React, Next.js, TypeScript, and shadcn/ui.',
+    title: 'FlowPost - AI-Powered Social Media Management Made Simple',
+    description: 'Create, schedule, and manage your social media content effortlessly with AI.',
   },
 }
 
