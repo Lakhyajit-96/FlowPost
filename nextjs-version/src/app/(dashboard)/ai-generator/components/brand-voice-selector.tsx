@@ -3,7 +3,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Badge } from "@/components/ui/badge"
 import { MessageSquare, Lock } from "lucide-react"
 
 interface BrandVoiceSelectorProps {
@@ -58,34 +57,32 @@ export function BrandVoiceSelector({ value, onChange, userPlan }: BrandVoiceSele
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle className="text-sm flex items-center gap-2">
-          <MessageSquare className="h-4 w-4 text-primary" />
+      <CardHeader className="pb-6">
+        <CardTitle className="text-base flex items-center gap-2">
+          <MessageSquare className="h-5 w-5 text-primary" />
           Brand Voice
         </CardTitle>
-        <CardDescription>Choose your content personality</CardDescription>
+        <CardDescription className="text-sm">Choose your content personality</CardDescription>
       </CardHeader>
-      <CardContent>
-        <RadioGroup value={value} onValueChange={onChange} className="space-y-3">
+      <CardContent className="pb-10">
+        <RadioGroup value={value} onValueChange={onChange} className="grid grid-cols-2 gap-5">
           {brandVoices.map((voice) => {
             const available = isAvailable(voice)
             return (
-              <div key={voice.id} className="flex items-start space-x-3">
+              <div key={voice.id} className={`relative flex items-center space-x-3 rounded-md border p-5 ${!available ? 'opacity-50' : 'cursor-pointer hover:bg-accent'}`}>
                 <RadioGroupItem 
                   value={voice.id} 
                   id={voice.id}
                   disabled={!available}
-                  className="mt-1"
                 />
                 <Label 
                   htmlFor={voice.id} 
-                  className={`flex-1 cursor-pointer ${!available ? 'opacity-50' : ''}`}
+                  className="flex-1 cursor-pointer text-sm"
                 >
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="font-medium text-sm">{voice.name}</span>
-                    {!available && <Lock className="h-3 w-3" />}
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-medium">{voice.name}</span>
+                    {!available && <Lock className="h-3.5 w-3.5" />}
                   </div>
-                  <p className="text-xs text-muted-foreground">{voice.description}</p>
                 </Label>
               </div>
             )

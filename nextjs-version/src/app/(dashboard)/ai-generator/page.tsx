@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Progress } from "@/components/ui/progress"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Sparkles, Copy, Check, Loader2, Wand2, Save, History, Trash2, Calendar, Crown, Zap, Lock, Target, Lightbulb, AlertCircle, BookOpen, Sliders, FileType, Hash, MessageCircle, Smile, Settings2, RefreshCw } from "lucide-react"
+import { Sparkles, Copy, Check, Loader2, Wand2, Save, History, Trash2, Calendar, Crown, Zap, Lock, Target, Lightbulb, AlertCircle, BookOpen, Sliders, FileType, Hash, MessageCircle, Smile, Settings2, RefreshCw, BarChart3, MessageSquare, Rocket, Video, Star, BookText, TrendingUp, Users, GraduationCap, Camera, Gift, Quote, PieChart, PartyPopper, Wrench, CalendarDays, HelpCircle, Leaf, ArrowLeftRight, Mic } from "lucide-react"
 import { toast } from "sonner"
 import { useUser } from "@clerk/nextjs"
 import { createClient } from "@/lib/supabase/client"
@@ -50,25 +50,25 @@ const PLAN_FEATURES = {
     name: "Free",
     generations: 0,
     contentTypes: [] as string[],
-    features: ["No AI generations available"]
+    features: ["1 social media account", "5 posts per month", "Basic features"]
   },
   starter: {
     name: "Starter",
     generations: 10,
     contentTypes: ["caption", "hashtags"] as string[],
-    features: ["10 AI generations/month", "Basic content types", "Standard templates"]
+    features: ["3 social media accounts", "30 posts per month", "10 AI generations/month", "Basic analytics", "Post scheduling", "Email support"]
   },
   professional: {
     name: "Professional",
     generations: 50,
     contentTypes: ["caption", "hashtags", "post_idea", "thread", "story"] as string[],
-    features: ["50 AI generations/month", "Advanced content types", "Brand voice", "Content templates"]
+    features: ["10 social media accounts", "100 posts per month", "50 AI generations/month", "Advanced analytics", "AI content generation", "Priority support", "Team collaboration"]
   },
   agency: {
     name: "Agency",
     generations: -1,
     contentTypes: ["caption", "hashtags", "post_idea", "thread", "story", "video_script"] as string[],
-    features: ["Unlimited AI generations", "All content types", "Brand voice", "Custom templates", "Bulk generation", "API access"]
+    features: ["Unlimited social accounts", "Unlimited posts", "Unlimited AI generations", "Advanced AI features", "White-label reports", "Dedicated support", "API access"]
   }
 }
 
@@ -224,7 +224,8 @@ export default function AIGeneratorPage() {
         prompt, 
         keywords,
         includeEmojis,
-        includeHashtags
+        includeHashtags,
+        brandVoice
       )
       setGeneratedContent(mockContent)
       toast.success("Content generated successfully!")
@@ -324,9 +325,21 @@ export default function AIGeneratorPage() {
     p: string,
     kw: string,
     emojis: boolean,
-    hashtags: boolean
+    hashtags: boolean,
+    voice: string
   ): string => {
     const keywordList = kw.split(',').map(k => k.trim()).filter(k => k)
+    
+    // Brand voice prefixes
+    const voicePrefix: Record<string, string> = {
+      default: "",
+      professional: "[Professional tone] ",
+      conversational: "[Conversational style] ",
+      bold: "[Bold & confident voice] ",
+      empathetic: "[Empathetic approach] ",
+      thought_leader: "[Thought leadership] "
+    }
+    
     const emojiMap: Record<string, string> = {
       professional: "💼 📊 🎯",
       casual: "😊 👋 ✨",
@@ -343,9 +356,11 @@ export default function AIGeneratorPage() {
 
     const emoji = emojis ? emojiMap[t] || "✨" : ""
     const multiplier = lengthMap[len] || 2
+    const prefix = voicePrefix[voice] || ""
 
     if (type === "caption") {
-      let caption = emojis ? `${emoji.split(' ')[0]} ` : ""
+      let caption = prefix
+      caption += emojis ? `${emoji.split(' ')[0]} ` : ""
       caption += `${p}\n\n`
       
       if (multiplier >= 2) {
@@ -562,17 +577,62 @@ export default function AIGeneratorPage() {
   return (
     <div className="flex-1 space-y-6 px-6 pt-0">
       {/* Header */}
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
-              <Sparkles className="h-6 w-6 text-primary" />
-              AI Content Generator
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              Generate engaging social media content with advanced AI assistance
-            </p>
+      <div className="flex flex-col gap-4">
+        <div className="flex items-start justify-between gap-6">
+          <div className="flex-1 space-y-4">
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
+                <Sparkles className="h-7 w-7 text-primary" />
+                AI Content Generator
+              </h1>
+              <p className="text-muted-foreground mt-2 text-base">
+                Create high-quality, engaging social media content in seconds with AI-powered assistance
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex items-start gap-3 p-3 rounded-lg border bg-card">
+                <div className="h-10 w-10 rounded-full bg-green-500/10 flex items-center justify-center flex-shrink-0">
+                  <FileType className="h-5 w-5 text-green-600" />
+                </div>
+                <div>
+                  <p className="font-medium text-sm">6 Content Types</p>
+                  <p className="text-xs text-muted-foreground">Captions, hashtags, threads, stories & more</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3 p-3 rounded-lg border bg-card">
+                <div className="h-10 w-10 rounded-full bg-blue-500/10 flex items-center justify-center flex-shrink-0">
+                  <Target className="h-5 w-5 text-blue-600" />
+                </div>
+                <div>
+                  <p className="font-medium text-sm">Multi-Platform</p>
+                  <p className="text-xs text-muted-foreground">Optimized for Instagram, LinkedIn, X & more</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3 p-3 rounded-lg border bg-card">
+                <div className="h-10 w-10 rounded-full bg-purple-500/10 flex items-center justify-center flex-shrink-0">
+                  <MessageSquare className="h-5 w-5 text-purple-600" />
+                </div>
+                <div>
+                  <p className="font-medium text-sm">Brand Voice</p>
+                  <p className="text-xs text-muted-foreground">6 voice styles to match your brand personality</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3 p-3 rounded-lg border bg-card">
+                <div className="h-10 w-10 rounded-full bg-orange-500/10 flex items-center justify-center flex-shrink-0">
+                  <BarChart3 className="h-5 w-5 text-orange-600" />
+                </div>
+                <div>
+                  <p className="font-medium text-sm">Smart Analytics</p>
+                  <p className="text-xs text-muted-foreground">Real-time engagement scores & insights</p>
+                </div>
+              </div>
+            </div>
           </div>
+          
           {planLimits && (
             <Card className="min-w-[280px]">
               <CardContent className="pt-6">
@@ -634,11 +694,34 @@ export default function AIGeneratorPage() {
       )}
 
       {userPlan === "starter" && !loadingLimits && (
-        <Alert className="border-blue-500/50 bg-blue-500/5">
-          <AlertCircle className="h-4 w-4 text-blue-500" />
-          <AlertDescription>
-            Demo Mode: You're set to Starter plan with 10 AI generations/month. To change your plan, update the <code className="text-xs bg-muted px-1 py-0.5 rounded">subscription_tier</code> in the users table or complete Stripe checkout.
-          </AlertDescription>
+        <Alert className="border-blue-500/50 bg-gradient-to-r from-blue-500/10 to-blue-500/5">
+          <div className="flex items-start gap-3">
+            <div className="h-8 w-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <Sparkles className="h-4 w-4 text-blue-600" />
+            </div>
+            <div className="flex-1">
+              <AlertDescription className="text-sm">
+                <span className="font-semibold text-blue-700 dark:text-blue-400">Welcome to FlowPost AI Generator!</span>
+                <p className="mt-1 text-muted-foreground">
+                  You're currently on the <span className="font-medium text-foreground">Starter plan</span> with <span className="font-medium text-foreground">10 AI generations per month</span>. 
+                  Need more content? Upgrade to Professional (50/month) or Agency (unlimited) for advanced features.
+                </p>
+                <div className="flex items-center gap-2 mt-3">
+                  <Button variant="default" size="sm" className="cursor-pointer" asChild>
+                    <Link href="/settings/billing">
+                      <Crown className="h-3 w-3 mr-1" />
+                      View Plans
+                    </Link>
+                  </Button>
+                  <Button variant="outline" size="sm" className="cursor-pointer" asChild>
+                    <Link href="/settings/billing">
+                      Compare Features
+                    </Link>
+                  </Button>
+                </div>
+              </AlertDescription>
+            </div>
+          </div>
         </Alert>
       )}
 
@@ -838,6 +921,34 @@ export default function AIGeneratorPage() {
                 baseContent={generatedContent}
                 onSelectVariation={setGeneratedContent}
               />
+
+              {/* Quick Tips */}
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <BookOpen className="h-4 w-4 text-primary" />
+                    Quick Tips
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2 text-xs text-muted-foreground pb-4">
+                  <div className="flex items-start gap-2">
+                    <Lightbulb className="h-3 w-3 mt-0.5 text-primary flex-shrink-0" />
+                    <p>Use specific keywords for better results</p>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <MessageCircle className="h-3 w-3 mt-0.5 text-primary flex-shrink-0" />
+                    <p>Try different tones to find your voice</p>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <Save className="h-3 w-3 mt-0.5 text-primary flex-shrink-0" />
+                    <p>Save successful prompts for reuse</p>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <Target className="h-3 w-3 mt-0.5 text-primary flex-shrink-0" />
+                    <p>Analyze engagement scores to improve</p>
+                  </div>
+                </CardContent>
+              </Card>
 
               {/* Brand Voice Selector */}
               <BrandVoiceSelector 
@@ -1082,22 +1193,6 @@ export default function AIGeneratorPage() {
                   )}
                 </CardContent>
               </Card>
-
-              {/* Quick Tips */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <BookOpen className="h-4 w-4 text-primary" />
-                    Quick Tips
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2 text-xs text-muted-foreground">
-                  <p>• Use specific keywords for better results</p>
-                  <p>• Try different tones to find your voice</p>
-                  <p>• Save successful prompts for reuse</p>
-                  <p>• Analyze engagement scores to improve</p>
-                </CardContent>
-              </Card>
             </div>
           </div>
 
@@ -1255,31 +1350,235 @@ export default function AIGeneratorPage() {
                 Content Templates
               </CardTitle>
               <CardDescription>
-                Quick-start templates for common content types
+                Professional templates to jumpstart your content creation. Click any template to load it instantly.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {[
-                  { title: "Product Launch", prompt: "Announce our new product launch with excitement", type: "caption" },
-                  { title: "Behind the Scenes", prompt: "Share behind-the-scenes of our team working", type: "story" },
-                  { title: "Customer Testimonial", prompt: "Feature a customer success story", type: "post_idea" },
-                  { title: "Tips & Tricks", prompt: "Share 5 tips for social media success", type: "thread" },
-                  { title: "Industry News", prompt: "Comment on latest industry trends", type: "caption" },
-                  { title: "Team Introduction", prompt: "Introduce our team members", type: "post_idea" }
-                ].map((template, index) => (
-                  <Card key={index} className="cursor-pointer hover:border-primary transition-colors" onClick={() => {
-                    setPrompt(template.prompt)
-                    setContentType(template.type)
-                    toast.success("Template loaded!")
-                  }}>
-                    <CardContent className="pt-6">
-                      <h4 className="font-medium mb-2">{template.title}</h4>
-                      <p className="text-sm text-muted-foreground mb-3">{template.prompt}</p>
-                      <Badge variant="secondary" className="text-xs">{template.type}</Badge>
-                    </CardContent>
-                  </Card>
-                ))}
+                  { 
+                    title: "Product Launch Announcement", 
+                    prompt: "Create an exciting announcement for our new product launch, highlighting the key features, benefits, and special launch offer. Include a strong call-to-action to drive early adoption.", 
+                    type: "caption",
+                    icon: Rocket,
+                    iconColor: "text-orange-600",
+                    category: "Marketing",
+                    platform: "instagram"
+                  },
+                  { 
+                    title: "Behind the Scenes Story", 
+                    prompt: "Share an authentic behind-the-scenes look at our team's daily work, showcasing our company culture, values, and the people who make it all happen.", 
+                    type: "story",
+                    icon: Video,
+                    iconColor: "text-purple-600",
+                    category: "Brand",
+                    platform: "instagram"
+                  },
+                  { 
+                    title: "Customer Success Story", 
+                    prompt: "Feature a compelling customer testimonial that showcases how our product/service solved their problem, improved their business, and delivered measurable results.", 
+                    type: "post_idea",
+                    icon: Star,
+                    iconColor: "text-yellow-600",
+                    category: "Social Proof",
+                    platform: "linkedin"
+                  },
+                  { 
+                    title: "Educational Thread", 
+                    prompt: "Create an informative thread sharing 7 actionable tips for social media success, including best practices, common mistakes to avoid, and pro strategies.", 
+                    type: "thread",
+                    icon: BookText,
+                    iconColor: "text-blue-600",
+                    category: "Education",
+                    platform: "twitter"
+                  },
+                  { 
+                    title: "Industry Insights", 
+                    prompt: "Share expert commentary on the latest industry trends, news, or developments, positioning our brand as a thought leader in the space.", 
+                    type: "caption",
+                    icon: TrendingUp,
+                    iconColor: "text-green-600",
+                    category: "Thought Leadership",
+                    platform: "linkedin"
+                  },
+                  { 
+                    title: "Team Member Spotlight", 
+                    prompt: "Introduce a team member with their role, background, fun facts, and what they love about working here. Make it personal and engaging.", 
+                    type: "post_idea",
+                    icon: Users,
+                    iconColor: "text-indigo-600",
+                    category: "Culture",
+                    platform: "linkedin"
+                  },
+                  { 
+                    title: "How-To Tutorial", 
+                    prompt: "Create a step-by-step tutorial showing how to use our product/service to achieve a specific goal. Make it clear, actionable, and beginner-friendly.", 
+                    type: "video_script",
+                    icon: GraduationCap,
+                    iconColor: "text-cyan-600",
+                    category: "Education",
+                    platform: "youtube"
+                  },
+                  { 
+                    title: "User-Generated Content", 
+                    prompt: "Craft a post featuring and celebrating content created by our community, encouraging more users to share their experiences with our brand.", 
+                    type: "caption",
+                    icon: Camera,
+                    iconColor: "text-pink-600",
+                    category: "Community",
+                    platform: "instagram"
+                  },
+                  { 
+                    title: "Limited-Time Offer", 
+                    prompt: "Announce a special limited-time promotion or discount with urgency, clear value proposition, and easy-to-follow redemption instructions.", 
+                    type: "caption",
+                    icon: Gift,
+                    iconColor: "text-red-600",
+                    category: "Sales",
+                    platform: "facebook"
+                  },
+                  { 
+                    title: "Motivational Quote", 
+                    prompt: "Share an inspiring quote relevant to our industry or audience, with context on why it matters and how it applies to their journey.", 
+                    type: "caption",
+                    icon: Quote,
+                    iconColor: "text-violet-600",
+                    category: "Inspiration",
+                    platform: "instagram"
+                  },
+                  { 
+                    title: "Poll & Engagement", 
+                    prompt: "Create an engaging poll or question to spark conversation, gather audience insights, and boost engagement with our community.", 
+                    type: "caption",
+                    icon: PieChart,
+                    iconColor: "text-teal-600",
+                    category: "Engagement",
+                    platform: "twitter"
+                  },
+                  { 
+                    title: "Milestone Celebration", 
+                    prompt: "Celebrate a company milestone, achievement, or anniversary with gratitude to our community and a look forward to what's next.", 
+                    type: "caption",
+                    icon: PartyPopper,
+                    iconColor: "text-amber-600",
+                    category: "Brand",
+                    platform: "linkedin"
+                  },
+                  { 
+                    title: "Problem-Solution Post", 
+                    prompt: "Address a common pain point our audience faces, explain why it matters, and present our solution as the answer they've been looking for.", 
+                    type: "post_idea",
+                    icon: Wrench,
+                    iconColor: "text-slate-600",
+                    category: "Marketing",
+                    platform: "linkedin"
+                  },
+                  { 
+                    title: "Weekly Recap", 
+                    prompt: "Summarize the week's highlights, top content, important updates, and what's coming next week to keep our audience informed and engaged.", 
+                    type: "thread",
+                    icon: CalendarDays,
+                    iconColor: "text-emerald-600",
+                    category: "Updates",
+                    platform: "twitter"
+                  },
+                  { 
+                    title: "FAQ Explainer", 
+                    prompt: "Answer the most frequently asked questions about our product/service in a clear, helpful, and comprehensive way.", 
+                    type: "post_idea",
+                    icon: HelpCircle,
+                    iconColor: "text-sky-600",
+                    category: "Support",
+                    platform: "facebook"
+                  },
+                  { 
+                    title: "Seasonal Campaign", 
+                    prompt: "Create seasonal content tied to current holidays, events, or trends, connecting our brand to what's happening now in a relevant way.", 
+                    type: "caption",
+                    icon: Leaf,
+                    iconColor: "text-lime-600",
+                    category: "Seasonal",
+                    platform: "instagram"
+                  },
+                  { 
+                    title: "Before & After", 
+                    prompt: "Showcase a transformation or improvement achieved using our product/service, with compelling visuals and measurable results.", 
+                    type: "post_idea",
+                    icon: ArrowLeftRight,
+                    iconColor: "text-fuchsia-600",
+                    category: "Social Proof",
+                    platform: "instagram"
+                  },
+                  { 
+                    title: "Live Event Promotion", 
+                    prompt: "Promote an upcoming webinar, workshop, or live event with key details, speaker highlights, and registration information.", 
+                    type: "caption",
+                    icon: Mic,
+                    iconColor: "text-rose-600",
+                    category: "Events",
+                    platform: "linkedin"
+                  }
+                ].map((template, index) => {
+                  const isLocked = !canUseContentType(template.type)
+                  const IconComponent = template.icon
+                  return (
+                    <Card 
+                      key={index} 
+                      className={`cursor-pointer transition-all ${isLocked ? 'opacity-60 cursor-not-allowed' : 'hover:border-primary hover:shadow-md'}`}
+                      onClick={() => {
+                        if (isLocked) {
+                          toast.error(`${template.type.replace('_', ' ')} is not available in your plan. Upgrade to unlock!`)
+                          return
+                        }
+                        setPrompt(template.prompt)
+                        setContentType(template.type)
+                        setPlatform(template.platform)
+                        toast.success("Template loaded! Ready to generate.")
+                      }}
+                    >
+                      <CardContent className="pt-6 space-y-3">
+                        <div className="flex items-start justify-between gap-2">
+                          <IconComponent className={`h-6 w-6 ${template.iconColor}`} />
+                          {isLocked && (
+                            <div className="flex items-center gap-1">
+                              <Lock className="h-4 w-4 text-muted-foreground" />
+                              <Badge variant="secondary" className="text-xs">Locked</Badge>
+                            </div>
+                          )}
+                        </div>
+                        <div>
+                          <h4 className="font-semibold mb-1 text-sm">{template.title}</h4>
+                          {isLocked ? (
+                            <div className="space-y-2">
+                              <p className="text-xs text-muted-foreground">
+                                This template is available in higher plans. Upgrade to unlock professional templates.
+                              </p>
+                              <Button variant="outline" size="sm" className="w-full cursor-pointer" asChild onClick={(e) => e.stopPropagation()}>
+                                <Link href="/settings/billing">
+                                  <Crown className="h-3 w-3 mr-1" />
+                                  Upgrade Plan
+                                </Link>
+                              </Button>
+                            </div>
+                          ) : (
+                            <p className="text-xs text-muted-foreground line-clamp-3">{template.prompt}</p>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <Badge variant="secondary" className="text-xs">
+                            {template.type.replace('_', ' ')}
+                          </Badge>
+                          <Badge variant="outline" className="text-xs">
+                            {template.category}
+                          </Badge>
+                          <Badge variant="outline" className="text-xs capitalize">
+                            {template.platform}
+                          </Badge>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )
+                })}
               </div>
             </CardContent>
           </Card>
