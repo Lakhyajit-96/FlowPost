@@ -12,11 +12,16 @@ import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Progress } from "@/components/ui/progress"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Sparkles, Copy, Check, Loader2, Wand2, Save, History, Trash2, Calendar, Crown, Zap, Lock, TrendingUp, Target, Lightbulb, AlertCircle } from "lucide-react"
+import { Sparkles, Copy, Check, Loader2, Wand2, Save, History, Trash2, Calendar, Crown, Zap, Lock, Target, Lightbulb, AlertCircle, Download, Share2, RefreshCw, BookOpen, Sliders, Brain, MessageSquare, BarChart3, FileText } from "lucide-react"
 import { toast } from "sonner"
 import { useUser } from "@clerk/nextjs"
 import { createClient } from "@/lib/supabase/client"
 import Link from "next/link"
+import { ContentAnalyzer } from "./components/content-analyzer"
+import { AISuggestions } from "./components/ai-suggestions"
+import { BrandVoiceSelector } from "./components/brand-voice-selector"
+import { ContentVariations } from "./components/content-variations"
+import { ExportOptions } from "./components/export-options"
 
 interface GeneratedContent {
   id?: string
@@ -86,6 +91,8 @@ export default function AIGeneratorPage() {
   const [planLimits, setPlanLimits] = useState<PlanLimits | null>(null)
   const [loadingLimits, setLoadingLimits] = useState(true)
   const [userPlan, setUserPlan] = useState<string>("starter")
+  const [brandVoice, setBrandVoice] = useState<string>("default")
+  const [showAdvanced, setShowAdvanced] = useState(false)
 
   useEffect(() => {
     if (user) {
@@ -653,7 +660,7 @@ export default function AIGeneratorPage() {
         </TabsList>
 
         <TabsContent value="generate" className="space-y-6">
-          <div className="grid gap-6 lg:grid-cols-[400px_1fr]">
+          <div className="grid gap-6 lg:grid-cols-[400px_1fr_350px]">
             {/* Left Sidebar - Settings */}
             <div className="space-y-4">
               <Card>
@@ -827,6 +834,41 @@ export default function AIGeneratorPage() {
                   )}
                 </CardContent>
               </Card>
+
+              {/* Brand Voice Selector */}
+              <BrandVoiceSelector 
+                value={brandVoice}
+                onChange={setBrandVoice}
+                userPlan={userPlan}
+              />
+
+              {/* Advanced Settings Toggle */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <Sliders className="h-4 w-4 text-primary" />
+                    Advanced Settings
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="advanced" className="cursor-pointer">Show Advanced Options</Label>
+                    <Switch
+                      id="advanced"
+                      checked={showAdvanced}
+                      onCheckedChange={setShowAdvanced}
+                    />
+                  </div>
+                  {showAdvanced && (
+                    <div className="mt-4 space-y-3 text-sm text-muted-foreground">
+                      <p>• Custom temperature control</p>
+                      <p>• Token limit adjustment</p>
+                      <p>• Model selection</p>
+                      <Badge variant="secondary" className="text-xs">Coming Soon</Badge>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </div>
 
             {/* Right Side - Prompt & Output */}
@@ -933,13 +975,22 @@ export default function AIGeneratorPage() {
                             </>
                           )}
                         </Button>
+                        <ExportOptions 
+                          content={generatedContent}
+                          metadata={{
+                            contentType,
+                            platform,
+                            tone,
+                            length
+                          }}
+                        />
                         <Button
                           variant="default"
-                          className="col-span-2 cursor-pointer"
+                          className="cursor-pointer"
                           onClick={() => toast.info("Post scheduling coming soon!")}
                         >
                           <Calendar className="h-4 w-4 mr-2" />
-                          Schedule Post
+                          Schedule
                         </Button>
                       </div>
 
@@ -968,6 +1019,43 @@ export default function AIGeneratorPage() {
                       </p>
                     </div>
                   )}
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Right Sidebar - Analysis & Suggestions */}
+            <div className="space-y-4">
+              {/* Content Analyzer */}
+              <ContentAnalyzer content={generatedContent} />
+
+              {/* AI Suggestions */}
+              <AISuggestions 
+                contentType={contentType}
+                platform={platform}
+                onApplySuggestion={(suggestion) => {
+                  setPrompt(prev => prev + " " + suggestion)
+                }}
+              />
+
+              {/* Content Variations */}
+              <ContentVariations 
+                baseContent={generatedContent}
+                onSelectVariation={setGeneratedContent}
+              />
+
+              {/* Quick Tips */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <BookOpen className="h-4 w-4 text-primary" />
+                    Quick Tips
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2 text-xs text-muted-foreground">
+                  <p>• Use specific keywords for better results</p>
+                  <p>• Try different tones to find your voice</p>
+                  <p>• Save successful prompts for reuse</p>
+                  <p>• Analyze engagement scores to improve</p>
                 </CardContent>
               </Card>
             </div>
