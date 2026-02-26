@@ -179,7 +179,7 @@ export function CTASection() {
                 {[
                   { color: 'bg-green-600 dark:bg-green-400', text: '14-day free trial' },
                   { color: 'bg-blue-600 dark:bg-blue-400', text: 'No credit card required' },
-                  { color: 'bg-purple-600 dark:bg-purple-400', text: 'Cancel anytime' }
+                  { color: 'bg-gray-600 dark:bg-gray-400', text: 'Cancel anytime' }
                 ].map((item, index) => (
                   <motion.div
                     key={index}

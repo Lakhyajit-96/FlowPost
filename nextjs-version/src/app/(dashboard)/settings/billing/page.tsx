@@ -162,13 +162,13 @@ export default function BillingSettings() {
   const getPlanFeatures = (planName: string) => {
     switch (planName) {
       case 'Starter':
-        return ['3 social media accounts', '30 posts per month', 'Basic analytics', 'Post scheduling', 'Email support']
+        return ['3 social media accounts', '30 posts per month', '10 AI generations per month', 'Basic analytics', 'Post scheduling', 'Email support']
       case 'Professional':
-        return ['10 social media accounts', '100 posts per month', 'Advanced analytics', 'AI content generation', 'Priority support', 'Team collaboration']
+        return ['10 social media accounts', '100 posts per month', '50 AI generations per month', 'Advanced analytics', 'AI content generation', 'Priority support', 'Team collaboration']
       case 'Agency':
-        return ['Unlimited social accounts', 'Unlimited posts', 'Advanced AI features', 'White-label reports', 'Dedicated support', 'API access']
+        return ['Unlimited social accounts', 'Unlimited posts', 'Unlimited AI generations', 'Advanced AI features', 'White-label reports', 'Dedicated support', 'API access']
       default:
-        return ['1 social media account', '5 posts per month', 'Basic features']
+        return ['1 social media account', '5 posts per month', '0 AI generations', 'Basic features']
     }
   }
 

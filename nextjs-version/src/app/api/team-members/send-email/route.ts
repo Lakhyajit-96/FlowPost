@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
               <title>${subject}</title>
             </head>
             <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-              <div style="background: linear-gradient(135deg, #7c3aed 0%, #9333ea 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+              <div style="background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
                 <h1 style="color: white; margin: 0; font-size: 28px;">FlowPost</h1>
                 <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">Social Media Management</p>
               </div>
@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
                 <div style="margin-top: 40px; padding-top: 30px; border-top: 1px solid #e5e7eb;">
                   <p style="color: #6b7280; font-size: 14px; margin: 0;">
                     Best regards,<br>
-                    <strong style="color: #7c3aed;">The FlowPost Team</strong>
+                    <strong style="color: #000000;">The FlowPost Team</strong>
                   </p>
                 </div>
               </div>
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
               <div style="text-align: center; margin-top: 30px; color: #9ca3af; font-size: 12px;">
                 <p>© ${new Date().getFullYear()} FlowPost. All rights reserved.</p>
                 <p style="margin-top: 10px;">
-                  <a href="https://flowpost.app" style="color: #7c3aed; text-decoration: none;">Visit our website</a> | 
+                  <a href="https://flowpost.app" style="color: #000000; text-decoration: none;">Visit our website</a> | 
                   <a href="https://flowpost.app/support" style="color: #7c3aed; text-decoration: none;">Get support</a>
                 </p>
               </div>

@@ -17,6 +17,7 @@ const plans = [
     features: [
       '3 social media accounts',
       '30 posts per month',
+      '10 AI generations per month',
       'Basic analytics',
       'Post scheduling',
       'Email support'
@@ -32,6 +33,7 @@ const plans = [
     features: [
       '10 social media accounts',
       '100 posts per month',
+      '50 AI generations per month',
       'Advanced analytics',
       'AI content generation',
       'Priority support',
@@ -48,6 +50,7 @@ const plans = [
     features: [
       'Unlimited social accounts',
       'Unlimited posts',
+      'Unlimited AI generations',
       'Advanced AI features',
       'White-label reports',
       'Dedicated support',

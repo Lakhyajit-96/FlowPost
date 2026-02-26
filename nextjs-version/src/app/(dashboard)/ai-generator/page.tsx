@@ -4,12 +4,12 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Sparkles, Copy, Check, Loader2, Wand2, Save, History, Trash2, Calendar, Crown, Zap, Lock, Target, Lightbulb, AlertCircle, BookOpen, Sliders, FileType, Hash, MessageCircle, Smile, Settings2, RefreshCw, BarChart3, MessageSquare, Rocket, Video, Star, BookText, TrendingUp, Users, GraduationCap, Camera, Gift, Quote, PieChart, PartyPopper, Wrench, CalendarDays, HelpCircle, Leaf, ArrowLeftRight, Mic } from "lucide-react"
@@ -214,26 +214,36 @@ export default function AIGeneratorPage() {
     setGenerating(true)
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 2500))
-      
-      const mockContent = generateDetailedContent(
-        contentType, 
-        platform, 
-        tone, 
-        length, 
-        prompt, 
-        keywords,
-        includeEmojis,
-        includeHashtags,
-        brandVoice
-      )
-      setGeneratedContent(mockContent)
+      const response = await fetch('/api/ai/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prompt,
+          contentType,
+          platform,
+          tone,
+          length,
+          keywords,
+          includeEmojis,
+          includeHashtags,
+          brandVoice
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to generate content')
+      }
+
+      setGeneratedContent(data.content)
       toast.success("Content generated successfully!")
       
       await fetchPlanLimits()
-    } catch (error) {
+      await fetchHistory()
+    } catch (error: any) {
       console.error("Error generating content:", error)
-      toast.error("Failed to generate content")
+      toast.error(error.message || "Failed to generate content")
     } finally {
       setGenerating(false)
     }
@@ -245,35 +255,9 @@ export default function AIGeneratorPage() {
       return
     }
 
-    setSaving(true)
-    try {
-      const supabase = createClient()
-      const { error } = await supabase
-        .from('ai_generated_content')
-        .insert({
-          user_id: user.id,
-          content: generatedContent,
-          content_type: contentType,
-          platform: platform,
-          tone: tone,
-          length: length,
-          prompt: prompt,
-          keywords: keywords,
-          include_emojis: includeEmojis,
-          include_hashtags: includeHashtags
-        })
-
-      if (error) throw error
-      
-      toast.success("Content saved to history!")
-      await fetchHistory()
-      await fetchPlanLimits()
-    } catch (error) {
-      console.error("Error saving content:", error)
-      toast.error("Failed to save content")
-    } finally {
-      setSaving(false)
-    }
+    // Content is already saved by the API, just refresh history
+    toast.success("Content is already saved in your history!")
+    await fetchHistory()
   }
 
   const handleDeleteHistory = async (id: string) => {
@@ -612,8 +596,8 @@ export default function AIGeneratorPage() {
               </div>
               
               <div className="flex items-start gap-3 p-3 rounded-lg border bg-card">
-                <div className="h-10 w-10 rounded-full bg-purple-500/10 flex items-center justify-center flex-shrink-0">
-                  <MessageSquare className="h-5 w-5 text-purple-600" />
+                <div className="h-10 w-10 rounded-full bg-gray-500/10 flex items-center justify-center flex-shrink-0">
+                  <MessageSquare className="h-5 w-5 text-gray-600" />
                 </div>
                 <div>
                   <p className="font-medium text-sm">Brand Voice</p>
@@ -667,12 +651,12 @@ export default function AIGeneratorPage() {
                   </div>
                 )}
                 {userPlan !== "agency" && (
-                  <Button variant="outline" size="sm" className="w-full mt-3 cursor-pointer" asChild>
-                    <Link href="/settings/billing">
+                  <Link href="/settings/billing" className="block w-full mt-3">
+                    <Button variant="outline" size="sm" className="w-full cursor-pointer">
                       <Zap className="h-3 w-3 mr-1" />
                       Upgrade Plan
-                    </Link>
-                  </Button>
+                    </Button>
+                  </Link>
                 )}
               </CardContent>
             </Card>
@@ -686,9 +670,9 @@ export default function AIGeneratorPage() {
           <AlertCircle className="h-4 w-4 text-primary" />
           <AlertDescription>
             You're on the Free plan. Upgrade to Starter ($19/mo) to unlock AI content generation!
-            <Button variant="link" className="p-0 h-auto ml-2" asChild>
-              <Link href="/settings/billing">Upgrade Now</Link>
-            </Button>
+            <Link href="/settings/billing" className="ml-2 text-primary hover:underline font-medium">
+              Upgrade Now
+            </Link>
           </AlertDescription>
         </Alert>
       )}
@@ -707,17 +691,17 @@ export default function AIGeneratorPage() {
                   Need more content? Upgrade to Professional (50/month) or Agency (unlimited) for advanced features.
                 </p>
                 <div className="flex items-center gap-2 mt-3">
-                  <Button variant="default" size="sm" className="cursor-pointer" asChild>
-                    <Link href="/settings/billing">
+                  <Link href="/settings/billing">
+                    <Button variant="default" size="sm" className="cursor-pointer">
                       <Crown className="h-3 w-3 mr-1" />
                       View Plans
-                    </Link>
-                  </Button>
-                  <Button variant="outline" size="sm" className="cursor-pointer" asChild>
-                    <Link href="/settings/billing">
+                    </Button>
+                  </Link>
+                  <Link href="/settings/billing">
+                    <Button variant="outline" size="sm" className="cursor-pointer">
                       Compare Features
-                    </Link>
-                  </Button>
+                    </Button>
+                  </Link>
                 </div>
               </AlertDescription>
             </div>
@@ -730,9 +714,9 @@ export default function AIGeneratorPage() {
           <AlertCircle className="h-4 w-4 text-orange-500" />
           <AlertDescription>
             You've used all {planLimits?.ai_generations_limit} AI generations this month. Upgrade for more!
-            <Button variant="link" className="p-0 h-auto ml-2" asChild>
-              <Link href="/settings/billing">Upgrade Plan</Link>
-            </Button>
+            <Link href="/settings/billing" className="ml-2 text-primary hover:underline font-medium">
+              Upgrade Plan
+            </Link>
           </AlertDescription>
         </Alert>
       )}
@@ -886,16 +870,16 @@ export default function AIGeneratorPage() {
                       </div>
 
                       <div className="flex flex-wrap gap-2">
-                        <Badge variant="secondary">
+                        <Badge variant="outline">
                           {contentType.replace('_', ' ').toUpperCase()}
                         </Badge>
-                        <Badge variant="secondary">
+                        <Badge variant="outline">
                           {platform.toUpperCase()}
                         </Badge>
-                        <Badge variant="secondary">
+                        <Badge variant="outline">
                           {tone.toUpperCase()}
                         </Badge>
-                        <Badge variant="secondary">
+                        <Badge variant="outline">
                           {length.toUpperCase()}
                         </Badge>
                         {includeEmojis && <Badge variant="outline">Emojis</Badge>}
@@ -1147,12 +1131,12 @@ export default function AIGeneratorPage() {
                     ))}
                   </div>
                   {userPlan !== "agency" && (
-                    <Button variant="default" className="w-full mt-4 cursor-pointer" asChild>
-                      <Link href="/settings/billing">
+                    <Link href="/settings/billing" className="block w-full mt-4">
+                      <Button variant="default" className="w-full cursor-pointer">
                         <Zap className="h-4 w-4 mr-2" />
                         Upgrade for More Features
-                      </Link>
-                    </Button>
+                      </Button>
+                    </Link>
                   )}
                 </CardContent>
               </Card>
@@ -1188,7 +1172,7 @@ export default function AIGeneratorPage() {
                       <p>• Custom temperature control</p>
                       <p>• Token limit adjustment</p>
                       <p>• Model selection</p>
-                      <Badge variant="secondary" className="text-xs">Coming Soon</Badge>
+                      <Badge variant="outline" className="text-xs">Coming Soon</Badge>
                     </div>
                   )}
                 </CardContent>
@@ -1271,8 +1255,8 @@ export default function AIGeneratorPage() {
                           <div className="flex items-start justify-between gap-4">
                             <div className="flex-1">
                               <div className="flex flex-wrap gap-2 mb-2">
-                                <Badge variant="secondary" className="text-xs">
-                                  {item.content_type.replace('_', ' ')}
+                                <Badge variant="outline" className="text-xs">
+                                  {item.content.replace('_', ' ')}
                                 </Badge>
                                 <Badge variant="outline" className="text-xs">
                                   {item.platform}
@@ -1318,9 +1302,9 @@ export default function AIGeneratorPage() {
                                 <Copy className="h-4 w-4" />
                               </Button>
                               <Button
-                                variant="outline"
+                                variant="destructive"
                                 size="sm"
-                                className="cursor-pointer text-destructive hover:text-destructive"
+                                className="cursor-pointer"
                                 onClick={() => item.id && handleDeleteHistory(item.id)}
                               >
                                 <Trash2 className="h-4 w-4" />
@@ -1370,7 +1354,7 @@ export default function AIGeneratorPage() {
                     prompt: "Share an authentic behind-the-scenes look at our team's daily work, showcasing our company culture, values, and the people who make it all happen.", 
                     type: "story",
                     icon: Video,
-                    iconColor: "text-purple-600",
+                    iconColor: "text-gray-600",
                     category: "Brand",
                     platform: "instagram"
                   },
@@ -1442,7 +1426,7 @@ export default function AIGeneratorPage() {
                     prompt: "Share an inspiring quote relevant to our industry or audience, with context on why it matters and how it applies to their journey.", 
                     type: "caption",
                     icon: Quote,
-                    iconColor: "text-violet-600",
+                    iconColor: "text-gray-600",
                     category: "Inspiration",
                     platform: "instagram"
                   },
@@ -1542,7 +1526,7 @@ export default function AIGeneratorPage() {
                           {isLocked && (
                             <div className="flex items-center gap-1">
                               <Lock className="h-4 w-4 text-muted-foreground" />
-                              <Badge variant="secondary" className="text-xs">Locked</Badge>
+                              <Badge variant="outline" className="text-xs">Locked</Badge>
                             </div>
                           )}
                         </div>
@@ -1553,19 +1537,19 @@ export default function AIGeneratorPage() {
                               <p className="text-xs text-muted-foreground">
                                 This template is available in higher plans. Upgrade to unlock professional templates.
                               </p>
-                              <Button variant="outline" size="sm" className="w-full cursor-pointer" asChild onClick={(e) => e.stopPropagation()}>
-                                <Link href="/settings/billing">
+                              <Link href="/settings/billing" onClick={(e) => e.stopPropagation()} className="block w-full">
+                                <Button variant="outline" size="sm" className="w-full cursor-pointer">
                                   <Crown className="h-3 w-3 mr-1" />
                                   Upgrade Plan
-                                </Link>
-                              </Button>
+                                </Button>
+                              </Link>
                             </div>
                           ) : (
                             <p className="text-xs text-muted-foreground line-clamp-3">{template.prompt}</p>
                           )}
                         </div>
                         <div className="flex items-center gap-2 flex-wrap">
-                          <Badge variant="secondary" className="text-xs">
+                          <Badge variant="outline" className="text-xs">
                             {template.type.replace('_', ' ')}
                           </Badge>
                           <Badge variant="outline" className="text-xs">
@@ -1587,3 +1571,6 @@ export default function AIGeneratorPage() {
     </div>
   )
 }
+
+
+
